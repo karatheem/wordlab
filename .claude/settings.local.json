@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:www.english-exercises.org)",
+      "WebFetch(domain:www.esl-lounge.com)",
+      "WebFetch(domain:www.grammarbank.com)",
+      "WebFetch(domain:www.myenglishpages.com)",
+      "WebFetch(domain:www.flo-joe.co.uk)",
+      "WebFetch(domain:useofenglishpro.com)",
+      "Bash(node *)"
+    ]
+  }
+}

@@ -1,0 +1,45 @@
+GITHUB SETUP — WORDLAB
+======================
+
+Four steps to connect this folder to a new GitHub repository.
+
+
+STEP 1 — Set your git identity
+-------------------------------
+Run these two commands (the email should match your GitHub account):
+
+    git config --global user.name "Your Name"
+    git config --global user.email "karatheem@gmail.com"
+
+
+STEP 2 — Install the GitHub CLI
+---------------------------------
+Paste this single command in full:
+
+    (type -p wget >/dev/null || (sudo apt update && sudo apt install wget -y)) && sudo mkdir -p -m 755 /etc/apt/keyrings && out=$(mktemp) && wget -nv -O$out https://cli.github.com/packages/githubcli-archive-keyring.gpg && cat $out | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null && sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null && sudo apt update && sudo apt install gh -y
+
+
+STEP 3 — Authenticate with GitHub
+------------------------------------
+    gh auth login
+
+When prompted:
+  - Choose: GitHub.com
+  - Choose: HTTPS
+  - Choose: Login with a web browser
+  - Copy the one-time code shown, paste it in the browser window that opens, and authorise.
+
+
+STEP 4 — Initialise the repo and push
+----------------------------------------
+Run these commands in order from the project folder:
+
+    git init
+    git add .
+    git commit -m "feat: initial commit — WordLab r1–r5"
+    gh repo create wordlab --public --source=. --remote=origin --push
+
+This creates a public repo called "wordlab" on your GitHub account,
+adds all files, and pushes everything in one go.
+
+To make it private instead, replace --public with --private.

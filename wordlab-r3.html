@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Word Lab · B1 English · R1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07080f;--surface:rgba(255,255,255,.04);--surface2:rgba(255,255,255,.08);
+  --border:rgba(255,255,255,.09);--text:#dde3f4;--dim:rgba(221,227,244,.42);
+  --cyan:#00cfff;--green:#00ff88;--purple:#a855f7;--pink:#ec4899;
+  --red:#ff4d6d;--yellow:#ffd166;--orange:#ff8c42;
+  --font:'Outfit',system-ui,sans-serif;--r:16px;--tc:#00cfff
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font);
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:24px 16px;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;
+  background-image:linear-gradient(rgba(0,207,255,.025) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(0,207,255,.025) 1px,transparent 1px);
+  background-size:44px 44px;pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;top:-220px;right:-220px;width:640px;height:640px;
+  background:radial-gradient(circle,rgba(168,85,247,.07) 0%,transparent 70%);
+  pointer-events:none;z-index:0}
+.screen{width:100%;max-width:700px;position:relative;z-index:1}
+.screen.hidden{display:none!important}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideR{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:translateX(0)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.09)}100%{transform:scale(1)}}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(0,207,255,.35)}50%{box-shadow:0 0 18px 5px rgba(0,207,255,.08)}}
+@keyframes xpF{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-64px) scale(1.3)}}
+.ain{animation:fadeUp .38s ease both}
+.asl{animation:slideR .32s ease both}
+
+/* LOGO */
+.logo{text-align:center;margin-bottom:40px}
+.logo h1{font-size:clamp(2.2rem,7vw,3.2rem);font-weight:900;letter-spacing:-1.5px;line-height:1;
+  background:linear-gradient(130deg,#00cfff 0%,#a855f7 55%,#ec4899 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.logo p{color:var(--dim);font-size:.85rem;letter-spacing:.08em;margin-top:8px;text-transform:uppercase}
+.sec-lbl{font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:16px}
+
+/* TOPIC CARDS */
+.topic-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.tc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+  padding:30px 14px 22px;text-align:center;cursor:pointer;
+  transition:transform .22s,border-color .22s,box-shadow .22s;position:relative;overflow:hidden;user-select:none}
+.tc::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .25s}
+.tc.football::before{background:radial-gradient(ellipse at 50% 0%,rgba(0,207,255,.18),transparent 65%)}
+.tc.kendama::before{background:radial-gradient(ellipse at 50% 0%,rgba(168,85,247,.18),transparent 65%)}
+.tc.perfume::before{background:radial-gradient(ellipse at 50% 0%,rgba(255,209,102,.18),transparent 65%)}
+.tc:hover::before{opacity:1}
+.tc:hover{transform:translateY(-5px)}
+.tc.football:hover{border-color:var(--cyan);box-shadow:0 10px 36px rgba(0,207,255,.14)}
+.tc.kendama:hover{border-color:var(--purple);box-shadow:0 10px 36px rgba(168,85,247,.14)}
+.tc.perfume:hover{border-color:var(--yellow);box-shadow:0 10px 36px rgba(255,209,102,.14)}
+.tc:active{transform:translateY(-2px)}
+.tc .em{font-size:2.8rem;display:block;margin-bottom:14px}
+.tc h2{font-size:.95rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;margin-bottom:6px}
+.tc p{font-size:.73rem;color:var(--dim);line-height:1.5;margin-bottom:14px}
+.pill{display:inline-block;font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:4px 11px;border-radius:999px}
+.football .pill{background:rgba(0,207,255,.13);color:var(--cyan);border:1px solid rgba(0,207,255,.25)}
+.kendama .pill{background:rgba(168,85,247,.13);color:var(--purple);border:1px solid rgba(168,85,247,.25)}
+.perfume .pill{background:rgba(255,209,102,.13);color:var(--yellow);border:1px solid rgba(255,209,102,.25)}
+
+/* LEVEL SELECT */
+.lvl-header{display:flex;align-items:center;gap:12px;margin-bottom:28px}
+.lvl-header .back-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 16px;cursor:pointer;font-size:.82rem;font-family:var(--font);color:var(--dim);transition:all .18s}
+.lvl-header .back-btn:hover{color:var(--text);border-color:rgba(255,255,255,.22)}
+.lvl-header h2{font-size:1.3rem;font-weight:800}
+.lvl-header .th{font-size:1.6rem;margin-left:2px}
+.lvl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.lc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+  padding:18px 14px 16px;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s;
+  position:relative;user-select:none}
+.lc:hover:not(.locked){transform:translateY(-3px)}
+.lc.locked{opacity:.45;cursor:not-allowed;filter:grayscale(.6)}
+.lc .lnum{font-size:.65rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--tc);margin-bottom:6px}
+.lc .lname{font-size:.92rem;font-weight:800;margin-bottom:4px}
+.lc .lfocus{font-size:.7rem;color:var(--dim);line-height:1.45;margin-bottom:10px}
+.lc .stars{font-size:.95rem;letter-spacing:2px;height:18px}
+.lc .lock-icon{position:absolute;top:14px;right:14px;font-size:1rem;opacity:.6}
+.lc.done-3{border-color:rgba(255,209,102,.35);box-shadow:0 4px 16px rgba(255,209,102,.08)}
+.lc.done-2{border-color:rgba(0,207,255,.25)}
+.lc.done-1{border-color:rgba(255,255,255,.18)}
+.lc.next-up{border-color:var(--tc);box-shadow:0 0 0 1px var(--tc),0 8px 24px rgba(0,207,255,.12)}
+.next-badge{display:inline-block;background:var(--tc);color:#000;font-size:.6rem;font-weight:800;
+  padding:3px 9px;border-radius:999px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+
+/* HUD */
+.hud{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.hud .back-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 16px;cursor:pointer;font-size:.82rem;font-family:var(--font);color:var(--dim);transition:all .18s}
+.hud .back-btn:hover{color:var(--text);border-color:rgba(255,255,255,.22)}
+.hud-sp{flex:1}
+.schip{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:7px 14px;font-size:.82rem;line-height:1}
+.schip .sl{color:var(--dim);font-size:.7rem;display:block;margin-bottom:2px}
+.schip .sv{font-weight:800;color:var(--tc);font-size:1rem}
+.strk{background:rgba(255,209,102,.1);border:1px solid rgba(255,209,102,.28);border-radius:10px;
+  padding:7px 12px;font-size:.82rem;font-weight:700;color:var(--yellow);
+  opacity:0;transform:scale(.85);transition:opacity .25s,transform .25s;pointer-events:none}
+.strk.on{opacity:1;transform:scale(1);animation:pop .3s ease}
+
+/* PROGRESS */
+.prog-out{height:5px;background:var(--surface2);border-radius:999px;margin-bottom:14px;overflow:hidden}
+.prog-in{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--tc),var(--purple));
+  transition:width .5s cubic-bezier(.4,0,.2,1)}
+.dot-row{display:flex;gap:6px;justify-content:center;margin-bottom:20px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);transition:background .3s,border-color .3s}
+.dot.cur{background:var(--tc);border-color:var(--tc);animation:glow 1.8s infinite}
+.dot.ok{background:var(--green);border-color:var(--green)}
+.dot.miss{background:var(--red);border-color:var(--red)}
+
+/* EXERCISE CARD */
+.exc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.ex-top{display:flex;align-items:center;gap:10px;padding:13px 22px;border-bottom:1px solid var(--border);background:var(--surface2)}
+.ex-top .te{font-size:1.3rem}
+.ex-top .tn{font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--tc)}
+.ex-top .en{margin-left:auto;font-size:.72rem;color:var(--dim)}
+.anec{padding:18px 22px;border-bottom:1px solid var(--border)}
+.anec-in{display:flex;gap:14px;align-items:flex-start;background:var(--surface2);
+  border-left:3px solid var(--tc);border-radius:0 10px 10px 0;padding:13px 16px}
+.anec-in .ai{font-size:1.8rem;line-height:1;flex-shrink:0;margin-top:2px}
+.anec-in p{font-size:.875rem;line-height:1.68;color:var(--dim);font-style:italic}
+.ex-body{padding:22px}
+.rtag{display:inline-flex;align-items:center;gap:8px;border-radius:8px;padding:5px 13px;
+  font-size:.78rem;font-weight:700;letter-spacing:.07em;margin-bottom:18px;border:1px solid transparent}
+.tf .rtag{background:rgba(0,207,255,.1);border-color:rgba(0,207,255,.22);color:var(--cyan)}
+.tk .rtag{background:rgba(168,85,247,.1);border-color:rgba(168,85,247,.22);color:var(--purple)}
+.tp .rtag{background:rgba(255,209,102,.1);border-color:rgba(255,209,102,.22);color:var(--yellow)}
+.rtag .rl{color:var(--dim);font-weight:400}
+.sent{font-size:1.08rem;line-height:1.8;margin-bottom:6px;color:var(--text)}
+.blank{display:inline-block;min-width:110px;border-bottom:2px solid var(--tc);
+  color:var(--tc);font-weight:700;text-align:center;padding:0 6px;transition:color .2s,border-color .2s}
+.blank.filled{color:var(--text);border-color:rgba(255,255,255,.2)}
+.hstrip{font-size:.76rem;color:var(--dim);margin-bottom:18px}
+.hstrip strong{color:var(--tc)}
+.hrev{font-size:.8rem;color:var(--dim);background:var(--surface2);border-radius:8px;
+  padding:9px 14px;margin-bottom:10px;display:none}
+.hrev.on{display:block;animation:fadeUp .25s ease both}
+.hrev::before{content:'💡  '}
+.inrow{display:flex;gap:9px;margin-bottom:10px}
+.wi{flex:1;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;
+  padding:13px 18px;font-size:1rem;font-family:var(--font);color:var(--text);outline:none;
+  transition:border-color .2s,box-shadow .2s,background .2s}
+.wi::placeholder{color:var(--dim)}
+.wi:focus{border-color:var(--tc);box-shadow:0 0 0 3px rgba(0,207,255,.09)}
+.wi.correct{border-color:var(--green);background:rgba(0,255,136,.06);box-shadow:0 0 0 3px rgba(0,255,136,.1)}
+.wi.wrong{border-color:var(--red);background:rgba(255,77,109,.06);animation:shake .38s ease}
+.btn{padding:12px 20px;border-radius:10px;font-family:var(--font);font-size:.88rem;
+  font-weight:700;cursor:pointer;border:none;transition:filter .18s,transform .12s;white-space:nowrap}
+.btn:hover{filter:brightness(1.1)}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.4;cursor:default}
+.bg{background:var(--surface2);border:1px solid var(--border);color:var(--dim)}
+.bg:hover{color:var(--text);border-color:rgba(255,255,255,.22)}
+.tf .ba{background:linear-gradient(135deg,#00cfff,#0055ff);color:#000}
+.tk .ba{background:linear-gradient(135deg,#a855f7,#ec4899);color:#fff}
+.tp .ba{background:linear-gradient(135deg,#ffd166,#ff8c42);color:#000}
+.fb{border-radius:10px;padding:13px 17px;font-size:.87rem;line-height:1.55;margin-bottom:12px;display:none;animation:fadeUp .28s ease both}
+.fb.correct{background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.22);color:#00cc6e;display:block}
+.fb.wrong{background:rgba(255,77,109,.08);border:1px solid rgba(255,77,109,.22);color:#ff6b84;display:block}
+.fb .rv{font-weight:800;color:var(--green)}
+.nxt{width:100%;padding:14px;display:none}
+.nxt.on{display:block;animation:fadeUp .28s ease both}
+
+/* RESULTS */
+.rh{text-align:center;margin-bottom:28px}
+.rem{font-size:3.8rem;display:block;margin-bottom:10px}
+.rh h2{font-size:clamp(1.7rem,5vw,2.2rem);font-weight:900;letter-spacing:-.5px;line-height:1.1}
+.rh p{color:var(--dim);font-size:.9rem;margin-top:8px;line-height:1.55}
+.sc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:28px;text-align:center;margin-bottom:16px}
+.sb{font-size:clamp(3rem,10vw,4.4rem);font-weight:900;letter-spacing:-2px;line-height:1;color:var(--tc)}
+.sb .dn{font-size:.45em;color:var(--dim);font-weight:400}
+.gp{display:inline-block;margin-top:14px;padding:6px 22px;border-radius:999px;font-size:.82rem;font-weight:800;letter-spacing:.1em}
+.ga{background:rgba(0,255,136,.13);color:var(--green);border:1px solid rgba(0,255,136,.25)}
+.gb{background:rgba(0,207,255,.13);color:var(--cyan);border:1px solid rgba(0,207,255,.25)}
+.gc{background:rgba(255,209,102,.13);color:var(--yellow);border:1px solid rgba(255,209,102,.25)}
+.gd{background:rgba(255,77,109,.13);color:var(--red);border:1px solid rgba(255,77,109,.25)}
+.bdown{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:18px}
+.bdr{display:flex;align-items:center;gap:10px;padding:11px 18px;border-bottom:1px solid var(--border);font-size:.85rem}
+.bdr:last-child{border-bottom:none}
+.bdr .br{font-weight:700;min-width:110px;color:var(--text)}
+.bdr .ba2{color:var(--dim);flex:1}
+.bdr .bm{font-size:1rem;flex-shrink:0}
+.bdr .bcv{font-size:.78rem;color:var(--green)}
+.rbtns{display:flex;gap:12px}
+.bo{flex:1;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:14px;font-size:.9rem}
+.bo:hover{border-color:rgba(255,255,255,.28);background:var(--surface2)}
+.bpa{flex:2;padding:14px;font-size:.95rem}
+.xpb{position:fixed;pointer-events:none;z-index:9999;font-size:1rem;font-weight:900;
+  color:var(--green);text-shadow:0 0 12px rgba(0,255,136,.65);animation:xpF 1.2s ease forwards}
+@media(max-width:520px){
+  .topic-grid,.lvl-grid{grid-template-columns:1fr}
+  .logo h1{font-size:2.4rem}
+  .sent{font-size:.98rem}
+  .sb{font-size:3rem}
+  .bottom-panel{grid-template-columns:1fr}
+}
+
+/* ── BOTTOM PANEL ── */
+.bottom-panel{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px}
+
+/* INFO CARD */
+.info-card{background:var(--surface);border:1px solid rgba(255,209,102,.18);border-radius:var(--r);padding:18px 20px}
+.info-card .ic-head{display:flex;align-items:center;gap:8px;font-size:.78rem;font-weight:800;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--yellow);margin-bottom:14px}
+.info-list{list-style:none;display:flex;flex-direction:column;gap:9px}
+.info-list li{font-size:.78rem;color:var(--dim);line-height:1.55;padding-left:16px;position:relative}
+.info-list li::before{content:'·';position:absolute;left:0;color:var(--yellow);font-weight:900;font-size:1rem;line-height:1.2}
+.info-list li strong{color:var(--text);font-weight:600}
+
+/* TRACKER CARD */
+.tracker-card{background:var(--surface);border:1px solid rgba(0,255,136,.18);border-radius:var(--r);padding:18px 20px}
+.tracker-card .tc-head{display:flex;align-items:center;gap:8px;font-size:.78rem;font-weight:800;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--green);margin-bottom:14px}
+.tk-total-wrap{text-align:center;margin-bottom:14px}
+.tk-total{font-size:2.4rem;font-weight:900;letter-spacing:-1px;line-height:1;color:var(--green)}
+.tk-total-lbl{font-size:.68rem;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin-top:3px}
+.tk-rows{display:flex;flex-direction:column;gap:7px}
+.tk-row{display:flex;align-items:center;justify-content:space-between;font-size:.77rem}
+.tk-row .tk-topic{color:var(--dim);display:flex;align-items:center;gap:6px}
+.tk-row .tk-right{display:flex;align-items:center;gap:10px}
+.tk-row .tk-lvls{color:var(--dim);font-size:.72rem}
+.tk-row .tk-time{font-weight:700;color:var(--text);min-width:36px;text-align:right}
+.tk-row .tk-bar-wrap{width:70px;height:4px;background:var(--surface2);border-radius:999px;overflow:hidden}
+.tk-row .tk-bar{height:100%;border-radius:999px;background:var(--green);transition:width .6s ease}
+.tk-note{font-size:.68rem;color:var(--dim);margin-top:12px;padding-top:10px;border-top:1px solid var(--border)}
+/* ─── CASHOUT / CHECKER ───────────────────────────────────────────────────── */
+.cashout-wrap,.checker-wrap{margin-top:14px;padding-top:12px;border-top:1px solid var(--border)}
+.sub-lbl{font-size:.62rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
+.btn-cashout{width:100%;padding:11px;background:var(--tc);color:#000;border:none;border-radius:10px;font-family:var(--font);font-size:.82rem;font-weight:800;cursor:pointer;letter-spacing:.04em;transition:opacity .18s}
+.btn-cashout:hover{opacity:.82}
+.code-box{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 13px;margin:8px 0 6px;font-family:'Courier New',monospace;font-size:.67rem;word-break:break-all;color:var(--text);line-height:1.6}
+.btn-copy{padding:7px 14px;background:transparent;border:1px solid var(--border);border-radius:8px;font-family:var(--font);font-size:.73rem;color:var(--dim);cursor:pointer;transition:all .15s}
+.btn-copy:hover{border-color:var(--tc);color:var(--tc)}
+.cashout-hint{font-size:.7rem;color:var(--dim);margin-top:6px;margin-bottom:2px}
+.checker-row{display:flex;gap:8px;margin-top:8px}
+.checker-inp{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:9px 11px;font-family:'Courier New',monospace;font-size:.67rem;color:var(--text);outline:none;min-width:0}
+.checker-inp:focus{border-color:var(--tc)}
+.btn-verify{padding:9px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;font-family:var(--font);font-size:.76rem;font-weight:700;color:var(--dim);cursor:pointer;white-space:nowrap;transition:all .15s}
+.btn-verify:hover{border-color:var(--tc);color:var(--tc)}
+.vr{margin-top:10px;border-radius:10px;padding:11px 13px;border:1px solid transparent}
+.vr.bad{border-color:rgba(255,77,109,.35);background:rgba(255,77,109,.06)}
+.vr.good{border-color:rgba(0,255,136,.25);background:rgba(0,255,136,.04)}
+.vr .vr-msg{color:var(--red);font-size:.8rem;font-weight:600}
+.vr.good .vr-time{font-size:2rem;font-weight:900;letter-spacing:-1px;color:var(--green);line-height:1.1}
+.vr.good .vr-detail{font-size:.73rem;color:var(--dim);margin-top:5px}
+.vr.good .vr-ts{font-size:.68rem;color:var(--dim);margin-top:3px;opacity:.65}
+</style>
+</head>
+<body>
+
+<!-- WELCOME -->
+<div class="screen ain" id="s-welcome">
+  <div class="logo"><h1>Word Lab</h1><p>B1 Cambridge · Word Formation · Choose your world</p></div>
+  <div class="sec-lbl">Pick a topic to begin</div>
+  <div class="topic-grid">
+    <div class="tc football" onclick="pickTopic('football')">
+      <span class="em">⚽</span><h2>Football</h2>
+      <p>Worldies, tekkers, pressing &amp; the beautiful game</p>
+      <span class="pill">10 levels</span>
+    </div>
+    <div class="tc kendama" onclick="pickTopic('kendama')">
+      <span class="em">🪀</span><h2>Kendama</h2>
+      <p>KWC champions, spikes, Spacewalks &amp; sick combos</p>
+      <span class="pill">10 levels</span>
+    </div>
+    <div class="tc perfume" onclick="pickTopic('perfume')">
+      <span class="em">🌸</span><h2>Fragrance</h2>
+      <p>Notes, accords, sillage &amp; the art of scent</p>
+      <span class="pill">10 levels</span>
+    </div>
+  </div>
+
+  <!-- BOTTOM PANEL -->
+  <div class="bottom-panel">
+
+    <!-- LIMITATIONS -->
+    <div class="info-card">
+      <div class="ic-head"><span>ℹ️</span> How it works</div>
+      <ul class="info-list">
+        <li><strong>Progress resets</strong> if the page is closed, refreshed, or the browser tab is reopened — always work within a single session.</li>
+        <li><strong>A level only counts</strong> once you answer all 10 questions. Leaving mid-level does not save progress.</li>
+        <li><strong>Time is earned only for scores of 8, 9, or 10 out of 10.</strong> Lower scores still unlock the next level but do not add time.</li>
+        <li><strong>Levels unlock in order.</strong> Score 5 or more to open the next level in each topic.</li>
+        <li>The <strong>Hint button</strong> reveals the full answer pattern — use it to learn from, not to skip.</li>
+        <li>All three topics are independent — you can earn time across Football, Kendama, and Fragrance in any order.</li>
+      </ul>
+    </div>
+
+    <!-- TIME TRACKER -->
+    <div class="tracker-card">
+      <div class="tc-head"><span>⏱️</span> Time Earned</div>
+      <div class="tk-total-wrap">
+        <div class="tk-total" id="tk-total">0:00</div>
+        <div class="tk-total-lbl">minutes off your next session</div>
+      </div>
+      <div class="tk-rows">
+        <div class="tk-row">
+          <span class="tk-topic">⚽ Football</span>
+          <span class="tk-right">
+            <span class="tk-bar-wrap"><span class="tk-bar" id="tk-bar-football" style="width:0%"></span></span>
+            <span class="tk-lvls" id="tk-lvls-football">0 / 6</span>
+            <span class="tk-time" id="tk-time-football">0:00</span>
+          </span>
+        </div>
+        <div class="tk-row">
+          <span class="tk-topic">🪀 Kendama</span>
+          <span class="tk-right">
+            <span class="tk-bar-wrap"><span class="tk-bar" id="tk-bar-kendama" style="width:0%"></span></span>
+            <span class="tk-lvls" id="tk-lvls-kendama">0 / 6</span>
+            <span class="tk-time" id="tk-time-kendama">0:00</span>
+          </span>
+        </div>
+        <div class="tk-row">
+          <span class="tk-topic">🌸 Fragrance</span>
+          <span class="tk-right">
+            <span class="tk-bar-wrap"><span class="tk-bar" id="tk-bar-perfume" style="width:0%"></span></span>
+            <span class="tk-lvls" id="tk-lvls-perfume">0 / 6</span>
+            <span class="tk-time" id="tk-time-perfume">0:00</span>
+          </span>
+        </div>
+      </div>
+      <div class="tk-note">30 seconds earned per level scored 8 / 10 or higher · 30 levels · 15:00 max</div>
+
+      <!-- CASH OUT -->
+      <div class="cashout-wrap">
+        <div class="sub-lbl">Cash out</div>
+        <button class="btn-cashout" id="btn-cashout" onclick="generateCashout()">Generate Code</button>
+        <div id="cashout-result" style="display:none">
+          <div class="cashout-hint">Show this code to your tutor:</div>
+          <div class="code-box" id="cashout-code"></div>
+          <button class="btn-copy" id="btn-copy" onclick="copyCode()">📋 Copy</button>
+        </div>
+      </div>
+
+      <!-- TOKEN CHECKER -->
+      <div class="checker-wrap">
+        <div class="sub-lbl">Tutor: verify a code</div>
+        <div class="checker-row">
+          <input class="checker-inp" id="checker-inp" type="text" placeholder="Paste student code…" autocomplete="off" autocorrect="off" spellcheck="false">
+          <button class="btn-verify" onclick="verifyCode()">Verify</button>
+        </div>
+        <div class="vr" id="verify-result" style="display:none"></div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- LEVEL SELECT -->
+<div class="screen hidden" id="s-levels">
+  <div class="lvl-header">
+    <button class="back-btn" onclick="goHome()">← Topics</button>
+    <span class="th" id="lvl-emoji"></span>
+    <h2 id="lvl-title"></h2>
+  </div>
+  <div class="sec-lbl">Select a level</div>
+  <div class="lvl-grid" id="lvl-grid"></div>
+</div>
+
+<!-- EXERCISE -->
+<div class="screen hidden" id="s-exercise">
+  <div class="hud">
+    <button class="back-btn" onclick="goLevels()">← Levels</button>
+    <div class="hud-sp"></div>
+    <div class="schip"><span class="sl">Score</span><span class="sv" id="hud-sc">0</span></div>
+    <div class="strk" id="strk">🔥 <span id="strk-n">2</span></div>
+  </div>
+  <div class="prog-out"><div class="prog-in" id="prog" style="width:0%"></div></div>
+  <div class="dot-row" id="dots"></div>
+  <div class="exc" id="exc">
+    <div class="ex-top">
+      <span class="te" id="tb-em"></span>
+      <span class="tn" id="tb-nm"></span>
+      <span class="en" id="tb-n"></span>
+    </div>
+    <div class="anec"><div class="anec-in"><div class="ai" id="an-i"></div><p id="an-t"></p></div></div>
+    <div class="ex-body">
+      <div class="rtag"><span class="rl">Root word →</span><span id="root-d"></span></div>
+      <div class="sent" id="sent-el"></div>
+      <div class="hstrip" id="hst"></div>
+      <div class="hrev" id="hrev"></div>
+      <div class="inrow">
+        <input type="text" class="wi" id="wi" placeholder="Type your answer…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        <button class="btn bg" id="b-hint" onclick="useHint()">Hint</button>
+        <button class="btn ba" id="b-chk" onclick="check()">Check ↵</button>
+      </div>
+      <div class="fb" id="fb"></div>
+      <button class="btn ba nxt" id="b-nxt" onclick="advance()">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="screen hidden" id="s-results">
+  <div class="rh">
+    <span class="rem" id="r-em">🏆</span>
+    <h2 id="r-ti">Well played.</h2>
+    <p id="r-msg"></p>
+  </div>
+  <div class="sc">
+    <div class="sb"><span id="r-sc">0</span><span class="dn"> / 10</span></div>
+    <div><span class="gp" id="r-gp">B</span></div>
+  </div>
+  <div class="bdown" id="bdown"></div>
+  <div class="rbtns">
+    <button class="btn bo" onclick="goLevels()">← Levels</button>
+    <button class="btn ba bpa" onclick="restart()">Play Again</button>
+  </div>
+</div>
+
+<script>
+// ─── DATA ────────────────────────────────────────────────────────────────────
+// Structure: DATA[topicKey].levels[i] = { num, name, focus, sets:[10 exercises] }
+// Exercise: { icon, story, line, root, ok:[], strip, detail }
+
+const DATA = {
+
+football:{
+  label:'Football', emoji:'⚽', cls:'tf',
+  color:'#00cfff',
+  levels:[
+  {num:1,name:'Starter',focus:'-ment · -ful · -ive · UN-/IM-',sets:[
+    {icon:'🏟️',story:"It's the 90th minute, score 1–1, stadium shaking. One player lets fly from 35 yards and the keeper doesn't move. Pure tekkers.",
+     line:"The crowd's _____ reached its peak when the ball hit the back of the net in the final second.",root:'EXCITE',ok:['excitement'],strip:'noun · think -MENT',detail:'excitement — EXCITE + -MENT'},
+    {icon:'🎯',story:"He nutmegged three players in one move — not because he had to, because he could.",
+     line:"Everyone knew he was so _____ with both feet that coaches from rival clubs came just to watch.",root:'SKILL',ok:['skilful','skillful'],strip:'adjective · think -FUL',detail:'skilful / skillful — SKILL + -FUL'},
+    {icon:'📈',story:"Three months ago he struggled under pressure. Now he barely thinks about it. The coach said: \"You've come a long way.\"",
+     line:"His _____ over the past three months was remarkable — drills that felt impossible now felt natural.",root:'IMPROVE',ok:['improvement'],strip:'noun · think -MENT',detail:'improvement — IMPROVE + -MENT'},
+    {icon:'🛡️',story:"\"They score first, we're done,\" the manager told the squad. \"Tonight we protect what's ours.\" The shape was everything.",
+     line:"The manager organised a tight _____ block that the opposition could not break through all night.",root:'DEFEND',ok:['defensive'],strip:'adjective · think -IVE',detail:'defensive — DEFEND + -IVE'},
+    {icon:'🌟',story:"The ball looped up from the corner, hung in the air — then an overhead kick. Top corner. Keeper frozen. Half the stadium didn't believe it.",
+     line:"It was an _____ worldie — a goal that nobody in that ground would ever forget.",root:'BELIEVE',ok:['unbelievable'],strip:'adjective · add a negative prefix AND a suffix',detail:'unbelievable — UN- + BELIEVE + -ABLE'},
+    {icon:'🏆',story:"Two clubs. Same city. Same hunger. Every match between them felt like a final, even in November.",
+     line:"The fierce _____ for the league title between the two city rivals had lasted over a decade.",root:'COMPETE',ok:['competition'],strip:'noun · think -ITION',detail:'competition — COMPETE + -ITION'},
+    {icon:'💪',story:"He was up at six every morning — not because anyone told him to, but because he wanted to win aerial duels he used to lose.",
+     line:"All those pre-dawn sessions helped him build the _____ needed to dominate in the air.",root:'STRONG',ok:['strength'],strip:'noun · this changes its spelling — irregular form',detail:'strength — irregular noun from STRONG'},
+    {icon:'🥅',story:"Penalty. Cup final. She'd rehearsed this exact moment a thousand times in training. She placed the ball and breathed.",
+     line:"She stepped up to the spot _____ and buried it in the top corner without breaking her stride.",root:'CONFIDE',ok:['confidently'],strip:'adverb · think -ENTLY (adjective ends in -ent)',detail:'confidently — CONFIDENT + -LY'},
+    {icon:'⏱️',story:"There were three weeks where nothing improved. His touch was off, passes short. He thought about stopping. He didn't.",
+     line:"His _____ through the hard weeks — when nothing seemed to work — made him the player he became.",root:'PERSIST',ok:['persistence'],strip:'noun · think -ENCE',detail:'persistence — PERSIST + -ENCE'},
+    {icon:'🎖️',story:"Full time. He'd played all 90 minutes, won every header, scored the winner, and set up two others. The manager said nothing. The stats said it all.",
+     line:"His _____ in the final was considered one of the greatest individual displays the club had ever seen.",root:'PERFORM',ok:['performance'],strip:'noun · think -ANCE',detail:'performance — PERFORM + -ANCE'}
+  ]},
+
+  {num:2,name:'Building',focus:'Adverbs -ly · -ness · RE-',sets:[
+    {icon:'⚡',story:"Last-minute penalty in the cup final. Stadium silent. Just you, the ball, and the goalkeeper.",
+     line:"She stepped up _____ and placed the ball perfectly into the bottom corner.",root:'BRAVE',ok:['bravely'],strip:'adverb · think -LY',detail:'bravely — BRAVE + -LY'},
+    {icon:'🎉',story:"He'd been at the club ten years and never won a trophy. Then, in his final season, the cup was his.",
+     line:"He lifted the trophy _____, tears streaming down his face.",root:'HAPPY',ok:['happily'],strip:'adverb · think -LY (spelling change: y → i)',detail:'happily — HAPPY → HAPPI + -LY'},
+    {icon:'🏃',story:"Pre-season is brutal — double sessions, ice baths, endless running. But without that base, everything falls apart.",
+     line:"The manager invested heavily in the team's _____ programme before the new season.",root:'FIT',ok:['fitness'],strip:'noun · think -NESS',detail:'fitness — FIT + -NESS'},
+    {icon:'🧠',story:"Great midfielders don't just see the ball — they see the whole pitch, three steps ahead.",
+     line:"His tactical _____ of where every player was positioned set him apart from the whole squad.",root:'AWARE',ok:['awareness'],strip:'noun · think -NESS',detail:'awareness — AWARE + -NESS'},
+    {icon:'💡',story:"The stadium power cut. Midway through extra time. The floodlights went off one by one.",
+     line:"The ground fell into complete _____ before the backup generators kicked in.",root:'DARK',ok:['darkness'],strip:'noun · think -NESS',detail:'darkness — DARK + -NESS'},
+    {icon:'🟥',story:"The red card changed everything. Both sets of players argued, but the referee had already decided.",
+     line:"Many felt the defender had been _____ dismissed for what looked like a clean, fair tackle.",root:'FAIR',ok:['unfairly'],strip:'adverb · add negative prefix UN-, then -LY',detail:'unfairly — UN- + FAIR + -LY'},
+    {icon:'💨',story:"He had pace no one in the division could match. When he got the ball on halfway and turned, defenders just watched.",
+     line:"He accelerated so _____ that the fullback simply couldn't keep up.",root:'QUICK',ok:['quickly'],strip:'adverb · think -LY',detail:'quickly — QUICK + -LY'},
+    {icon:'🔄',story:"Relegation hurt. The stadium half-empty. But a club with real identity doesn't disappear — it comes back stronger.",
+     line:"The new manager's first task was to _____ the squad's confidence after the disaster of the previous campaign.",root:'BUILD',ok:['rebuild'],strip:'verb · add a prefix meaning again',detail:'rebuild — RE- + BUILD'},
+    {icon:'🎯',story:"A free kick in a dangerous position. He lined it up for two full minutes. The wall was nervous.",
+     line:"He placed the ball _____ on the spot, took three steps back, and curled it perfectly.",root:'CARE',ok:['carefully'],strip:'adverb · think -FULLY → remove -FUL and add -FULLY',detail:'carefully — CARE + -FULLY'},
+    {icon:'🩹',story:"The injury was visible from the stands. He clutched his hamstring and the crowd fell quiet.",
+     line:"The striker moved _____ to the sideline, waving the physio over as he went.",root:'SLOW',ok:['slowly'],strip:'adverb · think -LY',detail:'slowly — SLOW + -LY'}
+  ]},
+
+  {num:3,name:'Intermediate',focus:'-ance/-ence · -ity · -ship',sets:[
+    {icon:'📋',story:"Every training session, every recovery meal, every hour of sleep feeds into 90 minutes on a Saturday. Nothing is casual at the top level.",
+     line:"The captain reminded the squad of the _____ of staying focused right from the warm-up.",root:'IMPORTANT',ok:['importance'],strip:'noun · think -ANCE',detail:'importance — IMPORTANT → IMPORT + -ANCE'},
+    {icon:'💚',story:"She'd gone three matches without a goal. The manager kept playing her. 'I believe in you.' In the fourth game, she scored twice.",
+     line:"The manager's trust slowly restored her _____ in front of goal.",root:'CONFIDENT',ok:['confidence'],strip:'noun · think -ENCE (adjective → noun)',detail:'confidence — CONFIDENT → CONFID + -ENCE'},
+    {icon:'🎗️',story:"The armband was just a strip of fabric. But what it meant changed everything — the weight of 50,000 expectations.",
+     line:"The young midfielder grew into the _____ role and became the most respected captain in the league.",root:'LEAD',ok:['leadership'],strip:'noun · think -SHIP',detail:'leadership — LEAD + -ERSHIP'},
+    {icon:'🤝',story:"Rivals their whole careers. But after playing internationals together, something shifted. Off the pitch they became close.",
+     line:"The _____ that formed during the international break surprised both players and the press.",root:'FRIEND',ok:['friendship'],strip:'noun · think -SHIP',detail:'friendship — FRIEND + -SHIP'},
+    {icon:'🎗️',story:"Every player on the pitch makes decisions. But the striker who misses the last-minute sitter — that weight is real.",
+     line:"He accepted full _____ for the miss and publicly apologised to his teammates.",root:'RESPONSIBLE',ok:['responsibility'],strip:'noun · think -ITY (drop -ble)',detail:'responsibility — RESPONSIBLE → RESPONSIBILI + -TY'},
+    {icon:'📣',story:"He'd only been at the club six months but played with full commitment every sprint, never hiding — and the crowd loved him for it.",
+     line:"His _____ with the supporters grew enormously after his performance in the derby.",root:'POPULAR',ok:['popularity'],strip:'noun · think -ITY',detail:'popularity — POPULAR + -ITY'},
+    {icon:'🌍',story:"Dreaming of the Premier League is easy. But what does it actually take? The 5am alarms, the rejections, the hard conversations.",
+     line:"The club's scout explained the _____ of what professional football demands from a fifteen-year-old.",root:'REAL',ok:['reality'],strip:'noun · think -ITY',detail:'reality — REAL + -ITY'},
+    {icon:'🩼',story:"Three months injured. Watching from the stands. The hardest part isn't the pain — it's the waiting.",
+     line:"Recovering from a long-term injury requires enormous _____ and genuine mental strength.",root:'PATIENT',ok:['patience'],strip:'noun · think -ENCE (patient → patience)',detail:'patience — PATIENT → PATI + -ENCE'},
+    {icon:'🧱',story:"Their defensive shape was incredible. Crosses, long shots, one-twos — the opposition tried everything and hit a wall every time.",
+     line:"The team's _____ in the final twenty minutes was some of the best defensive football seen all season.",root:'RESIST',ok:['resistance'],strip:'noun · think -ANCE',detail:'resistance — RESIST + -ANCE'},
+    {icon:'🤫',story:"The goal went in. For one second nobody made a sound. Then sixty thousand people erupted at once.",
+     line:"The _____ that followed the disallowed goal was broken only by the away fans' celebrations.",root:'SILENT',ok:['silence'],strip:'noun · think -CE (adjective → noun)',detail:'silence — SILENT → SILEN + -CE'}
+  ]},
+
+  {num:4,name:'Advancing',focus:'-ous/-ious · -able · -less · -ish',sets:[
+    {icon:'⚠️',story:"He'd been running at defenders all game, at pace, with both feet. The right back had absolutely no answer.",
+     line:"The winger's movement into the box became increasingly _____ as the second half wore on.",root:'DANGER',ok:['dangerous'],strip:'adjective · think -OUS (spelling change)',detail:'dangerous — DANGER + -OUS'},
+    {icon:'🌐',story:"There are clubs whose names travel further than language itself — every football conversation on earth includes them.",
+     line:"The city's most _____ club had lifted the Champions League trophy three times in a decade.",root:'FAME',ok:['famous'],strip:'adjective · think -OUS (fame → famous)',detail:'famous — FAME → FAM + -OUS'},
+    {icon:'🌀',story:"You could never quite tell what he was going to do next. Defenders hated him — they simply couldn't set their feet.",
+     line:"His dribbling style was completely _____, making him almost impossible to mark one-on-one.",root:'PREDICT',ok:['unpredictable'],strip:'adjective · prefix UN- and suffix -ABLE',detail:'unpredictable — UN- + PREDICT + -ABLE'},
+    {icon:'😤',story:"The away stadium was loud, hostile, and tight. Everything about the place was designed to intimidate.",
+     line:"It was an _____ atmosphere for the visitors, but they kept their shape and earned the point.",root:'COMFORT',ok:['uncomfortable'],strip:'adjective · prefix UN- and suffix -ABLE',detail:'uncomfortable — UN- + COMFORT + -ABLE'},
+    {icon:'✨',story:"To come back from two goals down in a European semi-final at the away ground, in injury time, is not something you see every decade.",
+     line:"The comeback was truly _____ — the kind of night supporters would tell their grandchildren about.",root:'REMARK',ok:['remarkable'],strip:'adjective · think -ABLE',detail:'remarkable — REMARK + -ABLE'},
+    {icon:'🌅',story:"The sun was setting behind the main stand. Last minute of extra time. The ball fell to a substitute who'd been on sixty seconds.",
+     line:"It was a _____ victory — the perfect end to a perfect season.",root:'GLORY',ok:['glorious'],strip:'adjective · think -IOUS (spelling change: y → i)',detail:'glorious — GLORY → GLORI + -OUS'},
+    {icon:'😬',story:"The penalty was given in the 88th minute. The cup, the season, the trophy — all on one kick.",
+     line:"Even the manager looked _____, pacing the technical area as she approached the spot.",root:'NERVE',ok:['nervous'],strip:'adjective · think -OUS (drop the e)',detail:'nervous — NERVE → NERV + -OUS'},
+    {icon:'🎯',story:"Five trophies in five years. A manager who thought in decades. A chairman who backed him completely. That combination is rare.",
+     line:"The club's plan was _____ — but the resources and the will were in place to make it happen.",root:'AMBITION',ok:['ambitious'],strip:'adjective · think -OUS (drop -ion)',detail:'ambitious — AMBITION → AMBIT + -IOUS'},
+    {icon:'💫',story:"The shot was long range and straight at the keeper, who caught it comfortably. Nobody saw what was about to happen.",
+     line:"The effort looked _____ from distance, but the rebound landed perfectly for the substitute.",root:'HARM',ok:['harmless'],strip:'adjective · think -LESS',detail:'harmless — HARM + -LESS'},
+    {icon:'🧩',story:"One goal ahead, ten minutes left, the striker through on goal. Shoot? Hold? Wait for the whistle? Everything depends on one decision.",
+     line:"The _____ choice was to keep the ball in the corner and run down the clock.",root:'SENSE',ok:['sensible'],strip:'adjective · think -IBLE (special spelling)',detail:'sensible — SENSE → SENSI + -BLE'}
+  ]},
+
+  {num:5,name:'Expert',focus:'Person nouns · -EN · -ISE/-IZE',sets:[
+    {icon:'🪑',story:"There are players who become coaches, analysts — and then rare few who step into the dugout and change a club forever.",
+     line:"The new _____ arrived with a reputation for developing young talent and rebuilding defensive systems.",root:'MANAGE',ok:['manager'],strip:'noun (person) · think -ER',detail:'manager — MANAGE + -R'},
+    {icon:'🥊',story:"The team's most effective player finished with 23 goals and 14 assists. The creative engine behind everything.",
+     line:"The _____ scored twice in extra time to push the team into the final.",root:'ATTACK',ok:['attacker'],strip:'noun (person) · think -ER',detail:'attacker — ATTACK + -ER'},
+    {icon:'📉',story:"Three injuries in one week. The squad was stretched. The first team looked thin. The manager refused to change the system.",
+     line:"The run of injuries began to _____ the defensive options available to the coaching staff.",root:'WEAK',ok:['weaken'],strip:'verb · think -EN (adjective → verb)',detail:'weaken — WEAK + -EN'},
+    {icon:'📶',story:"January window. Two new signings. The problem position — central midfield — finally addressed. The second half looked different.",
+     line:"The manager used the winter window to _____ the middle of the park before the title run-in.",root:'STRONG',ok:['strengthen'],strip:'verb · think -EN',detail:'strengthen — STRONG + -EN'},
+    {icon:'🏗️',story:"The old stadium was loved but crumbling. New dressing rooms, upgraded training facilities. The board had finally committed.",
+     line:"The club received planning permission to _____ the south stand and increase capacity by eight thousand.",root:'MODERN',ok:['modernise','modernize'],strip:'verb · think -ISE or -IZE',detail:'modernise / modernize — MODERN + -ISE'},
+    {icon:'🎓',story:"Some coaches work across all positions. Others choose one thing and become the best in the world at it.",
+     line:"He decided to _____ in coaching goalkeepers after his own playing career ended at thirty-two.",root:'SPECIAL',ok:['specialise','specialize'],strip:'verb · think -ISE or -IZE',detail:'specialise / specialize — SPECIAL + -ISE'},
+    {icon:'🩹',story:"Sprinting alongside injured players at 6am, taping ankles, monitoring load data. The name that never appears in the match report.",
+     line:"The fitness _____ had been at the club fifteen years and was trusted completely by every player.",root:'TRAIN',ok:['trainer'],strip:'noun (person) · think -ER',detail:'trainer — TRAIN + -ER'},
+    {icon:'🔪',story:"Shooting had been poor for weeks. The manager changed the end-of-session routine — every training session ended at goal.",
+     line:"The extra finishing sessions were designed to _____ the attackers' accuracy in front of goal.",root:'SHARP',ok:['sharpen'],strip:'verb · think -EN',detail:'sharpen — SHARP + -EN'},
+    {icon:'🏅',story:"Out of thirty-two clubs who started the Champions League, two would walk out at Wembley. The journey to get there was brutal.",
+     line:"They became the first club from their country to reach the _____ stage of the competition in twenty years.",root:'FINAL',ok:['finalist'],strip:'noun · think -IST',detail:'finalist — FINAL + -IST'},
+    {icon:'↔️',story:"The passing had been too narrow — always through the middle, always predictable. The wingers needed to stretch the pitch.",
+     line:"The new winger's pace helped _____ the attacking play and created more space centrally.",root:'WIDE',ok:['widen'],strip:'verb · think -EN',detail:'widen — WIDE + -EN'}
+  ]},
+
+  {num:6,name:'Master',focus:'Double changes · DIS-/UN-/IR-/UNDER-',sets:[
+    {icon:'💔',story:"They'd led for 88 minutes. One deflected shot later, the cup dream was gone. The dressing room was completely silent.",
+     line:"The _____ of conceding so late was difficult to process — players sat in silence for twenty minutes.",root:'APPOINT',ok:['disappointment'],strip:'noun · prefix DIS- AND suffix -MENT',detail:'disappointment — DIS- + APPOINT + -MENT'},
+    {icon:'🗣️',story:"The manager wanted patience. The board wanted results. The star player wanted different tactics. Something was going to break.",
+     line:"The public _____ between the manager and the chairman unsettled the squad before the cup tie.",root:'AGREE',ok:['disagreement'],strip:'noun · prefix DIS- AND suffix -MENT',detail:'disagreement — DIS- + AGREE + -MENT'},
+    {icon:'🎭',story:"The player threw himself to the ground. No contact. The referee ran over. The replay showed everything instantly.",
+     line:"He had _____ claimed a penalty by exaggerating contact — and the referee reversed the decision.",root:'HONEST',ok:['dishonestly'],strip:'adverb · prefix DIS- AND suffix -LY',detail:'dishonestly — DIS- + HONEST + -LY'},
+    {icon:'💎',story:"She came on in the 60th minute of every game — sometimes scoring, sometimes setting up, always changing the game's tempo.",
+     line:"Her ability to change a game from the bench made her completely _____ to the manager's plans.",root:'VALUE',ok:['invaluable'],strip:'adjective · prefix IN- (means extremely valuable — not the usual negative!)',detail:'invaluable — IN- + VALUE + -ABLE'},
+    {icon:'🐐',story:"When he retired, the club spent three transfer windows trying to find someone to fill the gap. They never quite did.",
+     line:"After twenty years, the legendary goalkeeper proved truly _____ — nobody came close to his level.",root:'REPLACE',ok:['irreplaceable'],strip:'adjective · prefix IR- AND suffix -ABLE',detail:'irreplaceable — IR- + REPLACE + -ABLE'},
+    {icon:'🦶',story:"Stamping after the final whistle, in a game already won. It cost him a three-match ban and half the dressing room's respect.",
+     line:"The manager called the stamp completely _____ and made clear that behaviour would not be tolerated.",root:'RESPONSIBLE',ok:['irresponsible'],strip:'adjective · prefix IR- (used before words starting with r)',detail:'irresponsible — IR- + RESPONSIBLE'},
+    {icon:'📊',story:"The talent was always there — coaches said so, scouts said so — but three seasons passed and the title stayed a dream.",
+     line:"Critics pointed to years of _____ at a club with the resources to compete for the title every season.",root:'ACHIEVE',ok:['underachievement'],strip:'noun · prefix UNDER- AND suffix -MENT',detail:'underachievement — UNDER- + ACHIEVE + -MENT'},
+    {icon:'🏭',story:"When the factory closed the whole town felt it. The football club — a community anchor — suddenly had a new role.",
+     line:"Rising _____ in the area made the club's free matchday tickets for local families even more important.",root:'EMPLOY',ok:['unemployment'],strip:'noun · prefix UN- AND suffix -MENT',detail:'unemployment — UN- + EMPLOY + -MENT'},
+    {icon:'✈️',story:"He was the best player in the squad. Then one January, the club accepted a bid and by Tuesday he was in another country.",
+     line:"The sudden _____ of the team's best player in January left the fans completely devastated.",root:'APPEAR',ok:['disappearance'],strip:'noun · prefix DIS- AND suffix -ANCE',detail:'disappearance — DIS- + APPEAR + -ANCE'},
+    {icon:'📉',story:"Six consecutive losses. Training sessions were tense. Players avoiding the manager's eyes. It's hard to reverse that feeling.",
+     line:"The run of defeats was deeply _____, but the manager refused to change her system or her principles.",root:'COURAGE',ok:['discouraging'],strip:'adjective · prefix DIS- AND suffix -ING',detail:'discouraging — DIS- + COURAGE + -ING'}
+  ]},
+  {num:7,name:'Tactician',focus:'-AL · -ATION · MIS- · PRE-',sets:[
+    {icon:'🏆',story:"Arsenal's 2025-26 Premier League title was their first in over two decades — built on a ruthlessly organised club structure that left nothing to chance.",
+     line:"What separated Arsenal from their rivals was the deeply _____ approach that ran from the academy through to the first team.",root:'PROFESSION',ok:['professional'],strip:'adjective · think -AL',detail:'professional — PROFESSION + -AL'},
+    {icon:'🎯',story:"Before the Champions League final against PSG, Arsenal's coaching staff spent three days studying set pieces and transition patterns alone.",
+     line:"The level of _____ before the PSG final was the most thorough in the club's recent history — every set piece studied.",root:'PREPARE',ok:['preparation'],strip:'noun · think -ATION',detail:'preparation — PREPARE → PREPAR + -ATION'},
+    {icon:'🚩',story:"The referee's decision turned the semi-final. Replays showed the ball hadn't crossed the line — yet the goal stood.",
+     line:"The referee's _____ in the 94th minute — confirmed by video review — cost the home side a place in the final.",root:'JUDGE',ok:['misjudgement','misjudgment'],strip:'noun · prefix MIS- AND suffix -MENT',detail:'misjudgement — MIS- + JUDGE → JUDGEMENT'},
+    {icon:'⚽',story:"Harry Kane's celebration after his hundredth Bayern goal was exactly the same as his first — arms out, head back, pure joy.",
+     line:"Kane's _____ celebration — unchanged since his debut — became one of the most recognisable images in European football.",root:'TRADITION',ok:['traditional'],strip:'adjective · think -AL',detail:'traditional — TRADITION + -AL'},
+    {icon:'✨',story:"Nobody could explain exactly how the young forward kept appearing in the right place at the right moment. He just did.",
+     line:"His _____ movement made him almost impossible to defend — coaches said he seemed to read the game five seconds ahead.",root:'IMAGINE',ok:['imaginative'],strip:'adjective · think -ATIVE',detail:'imaginative — IMAGINE → IMAGIN + -ATIVE'},
+    {icon:'📢',story:"The manager's press conference caused confusion — reporters left unsure whether the star striker would start. The player found out the same way the fans did.",
+     line:"The _____ around team selection — a manager saying different things in training and in public — unsettled the entire squad.",root:'COMMUNICATE',ok:['miscommunication'],strip:'noun · prefix MIS- AND suffix -TION',detail:'miscommunication — MIS- + COMMUNICATE → COMMUNICATION'},
+    {icon:'🌏',story:"The club's summer tour of Japan took place five weeks before the league campaign began — a chance for fringe players to impress.",
+     line:"The manager used the _____ tour to give academy players extended minutes they would never get in competitive fixtures.",root:'SEASON',ok:['pre-season'],strip:'adjective · prefix PRE- (before the season)',detail:'pre-season — PRE- + SEASON'},
+    {icon:'🌍',story:"When the international break came, the squad split across twelve different countries — England, Germany, Brazil, Japan — all representing their nations.",
+     line:"The manager had only twelve players available during the _____ break, relying heavily on youth players who had stayed behind.",root:'NATION',ok:['national'],strip:'adjective · think -AL',detail:'national — NATION + -AL'},
+    {icon:'📺',story:"After the final whistle, one player refused to shake the referee's hand. Another gestured aggressively at the stands. Every camera caught it.",
+     line:"The club issued a formal apology after the _____ of two players following the defeat was broadcast across every sports channel.",root:'BEHAVE',ok:['misbehaviour','misbehavior'],strip:'noun · prefix MIS- AND suffix -IOUR',detail:'misbehaviour — MIS- + BEHAVE → BEHAVIOUR'},
+    {icon:'🌟',story:"Some goals aren't just goals — they're moments. A bicycle kick from 25 yards, no bounce, straight into the top corner. The crowd took three seconds to react.",
+     line:"The young striker's overhead kick was simply _____ — the kind of moment that finds its way onto highlight shows for decades.",root:'MAGIC',ok:['magical'],strip:'adjective · think -AL',detail:'magical — MAGIC + -AL'}
+  ]},
+  {num:8,name:'Elite',focus:'OVER- · -ISM · -ITY · -FUL',sets:[
+    {icon:'😤',story:"Three wins in a row had made the squad believe they could face anyone. Then the team in 12th place came to the stadium — and won 3-0.",
+     line:"The defeat proved the squad had been _____ — they had completely underestimated a side that had nothing to lose.",root:'CONFIDENT',ok:['overconfident'],strip:'adjective · prefix OVER- (too much confidence)',detail:'overconfident — OVER- + CONFIDENT'},
+    {icon:'📰',story:"Five defeats in six games brought the pundits out in force. Every decision the manager had made was suddenly under the microscope.",
+     line:"The wave of _____ in the press was relentless — every substitution, every formation change was publicly questioned.",root:'CRITIC',ok:['criticism'],strip:'noun · think -ICISM',detail:'criticism — CRITIC + -ISM → criticism'},
+    {icon:'🧤',story:"The goalkeeper made three impossible saves in the final ten minutes to keep his team alive. The crowd chanted his name for days.",
+     line:"The goalkeeper's _____ in those final minutes — three saves from point-blank range — kept the club's European dream alive.",root:'HERO',ok:['heroism'],strip:'noun · think -ISM',detail:'heroism — HERO + -ISM'},
+    {icon:'⚖️',story:"When the women's first team won the same trophy as the men's but received a fraction of the prize money, the backlash was immediate.",
+     line:"Players across both squads called for _____ in prize money — the trophy was the same, so the reward should be too.",root:'EQUAL',ok:['equality'],strip:'noun · think -ITY',detail:'equality — EQUAL + -ITY'},
+    {icon:'💪',story:"The performance was complete — every area of the pitch dominated from the first whistle to the last. The opposition barely touched the ball.",
+     line:"The display was _____ — the visitors couldn't hold the ball, couldn't build, couldn't breathe without being immediately pressed.",root:'POWER',ok:['overpowering'],strip:'adjective · prefix OVER- AND suffix -ING',detail:'overpowering — OVER- + POWER + -ING'},
+    {icon:'🎉',story:"Late in extra time, with the cup final still level, the substitute curled a left-footed shot from 30 yards into the top corner. Nobody moved for a second.",
+     line:"It was a _____ way to win the cup — a substitute, 30 yards, last touch of extra time, right into the top corner.",root:'WONDER',ok:['wonderful'],strip:'adjective · think -FUL',detail:'wonderful — WONDER + -FUL'},
+    {icon:'🏥',story:"The January window had closed. Twelve players were injured. The manager was picking the same eleven every three days.",
+     line:"The medical team warned that several players were _____, with three fixtures in seven days and no fresh legs available.",root:'WORK',ok:['overworked'],strip:'adjective · prefix OVER- AND suffix -ED',detail:'overworked — OVER- + WORK + -ED'},
+    {icon:'🎖️',story:"When two players wanted the same shirt number, the manager had a simple rule — whoever had been at the club longer had the right.",
+     line:"The number seven shirt went to the longer-serving player by _____ — club policy when two players have an equal claim.",root:'SENIOR',ok:['seniority'],strip:'noun · think -ITY',detail:'seniority — SENIOR + -ITY'},
+    {icon:'⏱️',story:"Ninety seconds of injury time. Two goals behind. Three goals scored. The stadium shook. Nobody in the ground breathed normally for a week.",
+     line:"Few moments in football history were as _____ as that comeback — three goals in ninety seconds of stoppage time.",root:'DRAMA',ok:['dramatic'],strip:'adjective · think -IC',detail:'dramatic — DRAMA → DRAMAT + -IC'},
+    {icon:'🎮',story:"The midfielder had touched the ball forty times and lost it once — a misplaced pass in the opening minute. Every other touch was perfect.",
+     line:"The young midfielder was the most _____ player on the pitch — close control, vision, and never a wasted touch.",root:'SKILL',ok:['skilful','skillful'],strip:'adjective · think -FUL',detail:'skilful — SKILL → SKIL + -FUL (one L drops)'}
+  ]},
+  {num:9,name:'Pro Plus',focus:'IN-/IL-/IM- negative prefixes · -EN',sets:[
+    {icon:'🧤',story:"The goalkeeper had always been reliable — until that night. Three shots, three goals. He couldn't get near any of them.",
+     line:"The goalkeeper looked completely _____ of stopping the attack — beaten three times in the opening eleven minutes.",root:'CAPABLE',ok:['incapable'],strip:'adjective · negative prefix IN-',detail:'incapable — IN- + CAPABLE'},
+    {icon:'🌧️',story:"Heavy rain, a waterlogged pitch, a referee with no choice — at halftime the whistle went and the players were told to go home.",
+     line:"With the pitch unplayable after an hour, the match was abandoned and recorded as _____ by the governing body.",root:'COMPLETE',ok:['incomplete'],strip:'adjective · negative prefix IN-',detail:'incomplete — IN- + COMPLETE'},
+    {icon:'📹',story:"The VAR check lasted four minutes. The striker's arm was up — it clearly touched the ball before going in. The goal was ruled out.",
+     line:"Video review showed the striker's arm had made contact — the goal was judged _____ and the decision reversed.",root:'LEGAL',ok:['illegal'],strip:'adjective · negative prefix IL- (used before L)',detail:'illegal — IL- + LEGAL'},
+    {icon:'😠',story:"Down one goal with fifteen minutes left, the manager changed formation and threw on three attackers. Caution was finished.",
+     line:"The fans grew _____ as the clock ticked down — they wanted risks, substitutions, something to change the game.",root:'PATIENT',ok:['impatient'],strip:'adjective · negative prefix IM- (used before P)',detail:'impatient — IM- + PATIENT'},
+    {icon:'🎯',story:"The striker missed the target six times in ninety minutes. Headers, volleys, one-on-ones — every shot sailed wide or over.",
+     line:"His finishing was uncharacteristically _____ — six attempts in ninety minutes and not one found the target.",root:'ACCURATE',ok:['inaccurate'],strip:'adjective · negative prefix IN-',detail:'inaccurate — IN- + ACCURATE'},
+    {icon:'🤔',story:"The manager brought off his best player in the 60th minute while his team were losing. Nobody in the press box could find a reason.",
+     line:"Substituting the team's best player while a goal down seemed completely _____ — the press questioned it for days.",root:'LOGIC',ok:['illogical'],strip:'adjective · negative prefix IL- AND suffix -AL',detail:'illogical — IL- + LOGIC + -AL'},
+    {icon:'🛡️',story:"The defensive shape had been too open in the first half. At halftime, the manager's instruction was simple and direct.",
+     line:"The manager told the back four to _____ their defensive line at the start of the second half and give less space in behind.",root:'TIGHT',ok:['tighten'],strip:'verb · add -EN (make tight)',detail:'tighten — TIGHT + -EN'},
+    {icon:'😴',story:"Three games a week for six weeks straight meant tired legs and slow reactions by the end. The body simply cannot sustain it.",
+     line:"Playing three times a week had begun to _____ the squad's intensity — tackles were slower, sprints fewer, errors creeping in.",root:'WEAK',ok:['weaken'],strip:'verb · add -EN (make weak)',detail:'weaken — WEAK + -EN'},
+    {icon:'🌟',story:"The new signing arrived in January and changed the atmosphere immediately — training was sharper, press conferences livelier.",
+     line:"The arrival of the young Brazilian did more than add goals — it seemed to _____ the whole mood around the club.",root:'BRIGHT',ok:['brighten'],strip:'verb · add -EN (make brighter)',detail:'brighten — BRIGHT + -EN'},
+    {icon:'💪',story:"Three penalty shootout defeats in two seasons. Some players broke under the pressure. One group came back tougher than before.",
+     line:"Back-to-back shootout exits seemed to _____ the squad's resolve — they returned to pre-season with something harder in their eyes.",root:'HARD',ok:['harden'],strip:'verb · add -EN (make tough)',detail:'harden — HARD + -EN'}
+  ]},
+  {num:10,name:'Champion',focus:'Mixed B1 patterns',sets:[
+    {icon:'🏆',story:"Arsenal's first league title in over two decades didn't come by accident — it was the product of five years of quiet, determined rebuilding.",
+     line:"The club's _____ title campaign was built on collective discipline and depth rather than individual brilliance.",root:'SUCCESS',ok:['successful'],strip:'adjective · think -FUL',detail:'successful — SUCCESS → SUCCESSF + -UL'},
+    {icon:'🧠',story:"The manager stood in front of his squad after the semi-final defeat. What he said next would set the tone for the whole summer.",
+     line:"The manager's _____ to rest the captain for the away leg was bold — but it created exactly the motivation he intended.",root:'DECIDE',ok:['decision'],strip:'noun · think -ION (spelling changes)',detail:'decision — DECIDE → DECIS + -ION'},
+    {icon:'🎙️',story:"Commentators talked about his positioning. Coaches studied how he moved. But he said he'd watched football since before he could walk.",
+     line:"The veteran midfielder's deep _____ of the game allowed him to compete at the highest level even as his pace declined.",root:'KNOW',ok:['knowledge'],strip:'noun · irregular form — spelling changes',detail:'knowledge — KNOW → KNOWL + -EDGE'},
+    {icon:'🏅',story:"When the captain lifted the trophy, the manager pointed to him and said three words: he did this.",
+     line:"The captain's _____ throughout the title run — calm in defeat, generous in victory — set the standard for the dressing room.",root:'LEAD',ok:['leadership'],strip:'noun · think -SHIP',detail:'leadership — LEAD + -ER + -SHIP → leadership'},
+    {icon:'🌀',story:"The forward changed direction four times in six seconds before shooting. The defender didn't know which way to step.",
+     line:"His movement was completely _____ — he could change angle and pace so quickly that one-on-one defending was almost impossible.",root:'PREDICT',ok:['unpredictable'],strip:'adjective · prefix UN- AND suffix -ABLE',detail:'unpredictable — UN- + PREDICT + -ABLE'},
+    {icon:'🔥',story:"Finishing runners-up three times in four years had built a fierce hunger in the squad. Nobody wanted to be second again.",
+     line:"Three near-misses had made the squad intensely _____ — they returned to pre-season with a desire that hadn't been there before.",root:'COMPETE',ok:['competitive'],strip:'adjective · think -ITIVE (spelling changes)',detail:'competitive — COMPETE → COMPETI + -TIVE'},
+    {icon:'⭐',story:"The young player had a poster of the great striker on his wall growing up. Twenty years later, he scored in a Champions League final.",
+     line:"He told reporters that his childhood hero had been the _____ behind everything — every early morning, every missed night out.",root:'INSPIRE',ok:['inspiration'],strip:'noun · think -ATION',detail:'inspiration — INSPIRE → INSPIR + -ATION'},
+    {icon:'🚀',story:"Promoted from League Two. Three years later, a League Cup final. The manager had never stopped believing even when others had given up.",
+     line:"What drove the club through four consecutive promotions was pure _____ — a manager who refused to accept a ceiling.",root:'DETERMINE',ok:['determination'],strip:'noun · think -ATION',detail:'determination — DETERMINE → DETERMIN + -ATION'},
+    {icon:'😰',story:"The young defender had never played in front of more than 8,000 fans. Now 75,000 were chanting — and the ball was at his feet.",
+     line:"The _____ of the 19-year-old in the opening minutes was clear — his first three passes went straight to opposition players.",root:'NERVE',ok:['nervousness'],strip:'noun · two changes: -OUS then -NESS',detail:'nervousness — NERVE → NERVOUS + -NESS'},
+    {icon:'🛡️',story:"Eighteen consecutive wins. No draws, no defeats. Opponents had stopped saying they could get something from them.",
+     line:"By March, the squad seemed genuinely _____ — opponents were already settling for damage limitation before the first whistle.",root:'BEAT',ok:['unbeatable'],strip:'adjective · prefix UN- AND suffix -ABLE',detail:'unbeatable — UN- + BEAT + -ABLE'}
+  ]}
+  ]
+},
+
+kendama:{
+  label:'Kendama', emoji:'🪀', cls:'tk',
+  color:'#a855f7',
+  levels:[
+  {num:1,name:'Starter',focus:'-ment · -tion · -ful · IM-',sets:[
+    {icon:'🎯',story:"A spike is one of the most satisfying moves in kendama — ball landing on the tip with a quiet click. But it never happens by accident. Your whole mind must be in that one moment.",
+     line:"Landing a clean spike in a competition run requires total _____ — one moment's distraction and the trick is lost.",root:'CONCENTRATE',ok:['concentration'],strip:'noun · think -TION',detail:'concentration — CONCENTRATE + -TION'},
+    {icon:'🌀',story:"The Lighthouse tests timing above everything else. The ball swings on the string and there's exactly one right moment to guide it into place.",
+     line:"He waited _____ for the perfect moment when the ball's arc aligned, then guided it onto the spike.",root:'PATIENT',ok:['patiently'],strip:'adverb · think -LY',detail:'patiently — PATIENT + -LY'},
+    {icon:'🌍',story:"KWC 2025 was in Hatsukaichi, Hiroshima. Adrian Vilau of Romania stood on the podium in 3rd place — built alone, far from the sport's heartland.",
+     line:"Adrian Vilau's 3rd-place finish at KWC 2025 was a remarkable _____ for European kendama culture.",root:'ACHIEVE',ok:['achievement'],strip:'noun · think -MENT',detail:'achievement — ACHIEVE + -MENT'},
+    {icon:'🕐',story:"Ryoga Kawamoto, the 2025 KWC champion, is known for the hours he puts in away from competition. Hundreds of reps of the same trick, every day — because the craft deserves it.",
+     line:"His _____ to perfecting every technique, even when nobody was watching, set him apart from the field.",root:'DEDICATE',ok:['dedication'],strip:'noun · think -TION',detail:'dedication — DEDICATE + -TION'},
+    {icon:'😮',story:"A Spacewalk looks like it ignores gravity — the kendama floats, spins, lands. At KWC the crowd goes silent, then erupts.",
+     line:"The audience watched in complete _____ as the player executed a flawless Spacewalk mid-combination.",root:'AMAZE',ok:['amazement'],strip:'noun · think -MENT',detail:'amazement — AMAZE + -MENT'},
+    {icon:'💭',story:"When you first see someone do a Stunt Plane your brain says: that's not possible. But you try. And try. Months later it suddenly is.",
+     line:"At first landing the Stunt Plane consistently seemed _____, but three months of practice changed everything.",root:'POSSIBLE',ok:['impossible'],strip:'adjective · add a negative prefix',detail:'impossible — IM- + POSSIBLE'},
+    {icon:'🎨',story:"A well-designed kendama is part art, part sport. The balance between ken shape and tama weight matters. A perfect combo looks like music made visible.",
+     line:"A perfectly executed kendama line is _____ to watch — every movement connects to the next without pause.",root:'BEAUTY',ok:['beautiful'],strip:'adjective · think -TIFUL (beauty → beauti-ful)',detail:'beautiful — BEAUTY → BEAUTI + -FUL'},
+    {icon:'🏅',story:"The Kendama World Cup draws players from Japan, Romania, the USA, France, and dozens more. Divisions run from beginner to pro.",
+     line:"The _____ at KWC 2025 brought together players from over 30 countries, all chasing the same dream.",root:'COMPETE',ok:['competition'],strip:'noun · think -ITION',detail:'competition — COMPETE + -ITION'},
+    {icon:'💡',story:"The best kendama players don't only repeat tricks — they invent new ones. A fresh angle, a different entry, a combo nobody had imagined before.",
+     line:"Top kendama players are celebrated for their _____ — always pushing what the toy is capable of.",root:'CREATE',ok:['creativity'],strip:'noun · think -IVITY',detail:'creativity — CREATE → CREATIV + -ITY'},
+    {icon:'🔥',story:"He watched the KWC 2025 final online at midnight — headphones on, everyone asleep. When Ryoga landed his final trick, he immediately grabbed his kendama.",
+     line:"Watching the KWC 2025 finals was deeply _____ — it pushed him to practise long after he'd normally have stopped.",root:'INSPIRE',ok:['inspiring'],strip:'adjective · think -ING',detail:'inspiring — INSPIRE + -ING'}
+  ]},
+
+  {num:2,name:'Building',focus:'Adverbs -ly · -ness · -SHIP · RE-',sets:[
+    {icon:'⚡',story:"The Fasthand Airplane is one of the fastest moves in kendama. The moment the ball leaves the cup, your hands are already moving.",
+     line:"He _____ repositioned his grip between tricks, barely giving his hands time to rest.",root:'QUICK',ok:['quickly'],strip:'adverb · think -LY',detail:'quickly — QUICK + -LY'},
+    {icon:'🌊',story:"A great kendama line isn't just about landing tricks — it's about how transitions feel. Rough combos look nervous. A flowing line looks effortless.",
+     line:"She moved _____ from the Around the Block into the Spacewalk, as if the whole combo was one thought.",root:'SMOOTH',ok:['smoothly'],strip:'adverb · think -LY',detail:'smoothly — SMOOTH + -LY'},
+    {icon:'🧭',story:"To execute a complex combo you need to know where the ball is even when you can't see it — tracking weight, swing, momentum through the string.",
+     line:"His _____ of the ball's position mid-flight was what let him attempt such demanding combinations.",root:'AWARE',ok:['awareness'],strip:'noun · think -NESS',detail:'awareness — AWARE + -NESS'},
+    {icon:'🗺️',story:"Adrian Vilau built his skills without a local kendama community — no mentors nearby, no training partners, just online videos and repetition.",
+     line:"The _____ of learning alone without a community made his KWC 2025 result even more impressive.",root:'HARD',ok:['hardship'],strip:'noun · think -SHIP',detail:'hardship — HARD + -SHIP'},
+    {icon:'🔓',story:"Once the muscle memory is there, the trick stops feeling like a trick — it just becomes part of how you move. That's the moment every player is working toward.",
+     line:"After weeks of repetition, she could _____ land the lighthouse without having to think about any of the steps.",root:'EASY',ok:['easily'],strip:'adverb · think -LY (y → i spelling change)',detail:'easily — EASY → EASI + -LY'},
+    {icon:'🦁',story:"Your first time attempting a trick in competition — under lights, with a crowd watching — is a completely different feeling from practice.",
+     line:"He _____ included the Stunt Plane in his competition run, even though he'd only landed it cleanly twice that week.",root:'BRAVE',ok:['bravely'],strip:'adverb · think -LY',detail:'bravely — BRAVE + -LY'},
+    {icon:'📐',story:"The choice of kendama matters more than people think. The gap between ball and cups, the weight of the ken — every millimetre has an effect.",
+     line:"She _____ measured the string length and cup gap before deciding which kendama to use in competition.",root:'CARE',ok:['carefully'],strip:'adverb · think -FULLY',detail:'carefully — CARE + -FULLY'},
+    {icon:'🐌',story:"Learning a trick fast is impossible. The body needs to absorb each part of the movement before connecting at speed. Rushing just builds bad habits.",
+     line:"His coach told him to practise the Lunar _____ at first, building each movement in stages.",root:'SLOW',ok:['slowly'],strip:'adverb · think -LY',detail:'slowly — SLOW + -LY'},
+    {icon:'🌙',story:"Some players train late outdoors until the light is completely gone. There's something meditative about kendama practice when the world gets quiet.",
+     line:"He continued practising alone in the _____, guided only by the feel of the string in his hand.",root:'DARK',ok:['darkness'],strip:'noun · think -NESS',detail:'darkness — DARK + -NESS'},
+    {icon:'💪',story:"Kendama looks effortless when done well. But wrist and forearm strength required for long combo runs takes real time to develop.",
+     line:"Daily practice doesn't just build technique — it also helps to _____ the wrists and improve overall control.",root:'STRONG',ok:['strengthen'],strip:'verb · think -EN',detail:'strengthen — STRONG + -EN'}
+  ]},
+
+  {num:3,name:'Intermediate',focus:'-ance/-ence · -ity · -ship',sets:[
+    {icon:'🤏',story:"Players sometimes skip grip practice — it feels boring. But mid-combo in competition, the grip is the only thing between you and a miss.",
+     line:"His coach never let him forget the _____ of consistent grip technique, even in basic practice.",root:'IMPORTANT',ok:['importance'],strip:'noun · think -ANCE',detail:'importance — IMPORTANT → IMPORT + -ANCE'},
+    {icon:'🧘',story:"Some tricks take days to learn. Some take months. Around Japan is in a different category — players who finally land it often laugh or cry.",
+     line:"Mastering the Around Japan requires a level of _____ that not every player is willing to commit to.",root:'PATIENT',ok:['patience'],strip:'noun · think -ENCE (patient → patience)',detail:'patience — PATIENT → PATI + -ENCE'},
+    {icon:'😤',story:"Some players fall apart when a trick fails in competition. Others reset, breathe, and attack the next move as if nothing happened.",
+     line:"Recovering from a missed trick mid-combo and continuing with _____ separates good players from great ones.",root:'CONFIDENT',ok:['confidence'],strip:'noun · think -ENCE',detail:'confidence — CONFIDENT → CONFID + -ENCE'},
+    {icon:'📱',story:"Kendama culture has exploded globally. What was once a Japanese tradition is now an international sport with its own media, sponsors, and championships.",
+     line:"The _____ of the sport grew significantly after KWC footage began circulating on social media worldwide.",root:'POPULAR',ok:['popularity'],strip:'noun · think -ITY',detail:'popularity — POPULAR + -ITY'},
+    {icon:'🎯',story:"Every player imagines standing at the KWC podium. But the training schedule behind that moment — four hours a day, for years — is less often talked about.",
+     line:"The _____ of competing at KWC level is thousands of hours of focused practice before the stage is even visible.",root:'REAL',ok:['reality'],strip:'noun · think -ITY',detail:'reality — REAL + -ITY'},
+    {icon:'🏟️',story:"The Kendama World Cup is held annually in Hatsukaichi, Hiroshima — the birthplace of competitive kendama. Beginner to pro divisions, all on one stage.",
+     line:"The annual _____ in Hiroshima attracts competitors from over thirty countries every summer.",root:'CHAMPION',ok:['championship'],strip:'noun · think -SHIP',detail:'championship — CHAMPION + -SHIP'},
+    {icon:'🧑‍🏫',story:"Senior players at the KWC are expected to mentor beginners. Passing on technique is one of the things that makes kendama culture different.",
+     line:"The veteran player took on a quiet _____ role, guiding younger competitors through the competition format.",root:'LEAD',ok:['leadership'],strip:'noun · think -SHIP',detail:'leadership — LEAD + -ERSHIP'},
+    {icon:'🤫',story:"At the moment of a spike attempt in competition, the whole room shifts. The audience holds its breath. Then the ball lands — or doesn't.",
+     line:"A respectful _____ fell over the crowd as the player set up for his final attempt in the run.",root:'SILENT',ok:['silence'],strip:'noun · -CE suffix (adjective → noun)',detail:'silence — SILENT → SILEN + -CE'},
+    {icon:'🧵',story:"String tension matters. A looser string gives different feedback than a tighter one. The physical sensation tells you where the ball is before your eyes catch up.",
+     line:"The subtle _____ of the string against his fingers gave him just enough feedback to land the trick cleanly.",root:'RESIST',ok:['resistance'],strip:'noun · think -ANCE',detail:'resistance — RESIST + -ANCE'},
+    {icon:'🌏',story:"Representing your country at a world championship isn't just about performing well — it's about how you carry yourself for the whole event.",
+     line:"Adrian Vilau understood the _____ of representing Romania at the KWC and approached every round with full professionalism.",root:'RESPONSIBLE',ok:['responsibility'],strip:'noun · think -ITY (drop -ble)',detail:'responsibility — RESPONSIBLE → RESPONSIBILI + -TY'}
+  ]},
+
+  {num:4,name:'Advancing',focus:'-ous · -able · -ic · -ful',sets:[
+    {icon:'🤯',story:"He landed five consecutive Spacewalk attempts during his qualifying run. Five. Each one clean. The judges looked at each other.",
+     line:"His consistency during the qualifying round was _____ — even players who had competed for years were impressed.",root:'REMARK',ok:['remarkable'],strip:'adjective · think -ABLE',detail:'remarkable — REMARK + -ABLE'},
+    {icon:'🎲',story:"Freestyle kendama lines are exciting precisely because they don't follow rules. Each player finds their own rhythm, their own language.",
+     line:"The freestyle format makes results wonderfully _____ — a new face can take the top spot any year.",root:'PREDICT',ok:['unpredictable'],strip:'adjective · prefix UN- and suffix -ABLE',detail:'unpredictable — UN- + PREDICT + -ABLE'},
+    {icon:'📣',story:"Certain tricks carry the name of the player who first landed them cleanly in competition. They become part of the vocabulary of the whole sport.",
+     line:"The Spacewalk became _____ worldwide after footage of it spread through kendama communities online.",root:'FAME',ok:['famous'],strip:'adjective · think -OUS (fame → famous)',detail:'famous — FAME → FAM + -OUS'},
+    {icon:'⚠️',story:"The Stunt Plane involves guiding the ball from the spike onto the cup in a controlled fall. Get the angle wrong and the ball drops.",
+     line:"The spike-to-cup transition in the Stunt Plane is technically _____ territory for a player who hasn't built wrist strength yet.",root:'DANGER',ok:['dangerous'],strip:'adjective · think -OUS',detail:'dangerous — DANGER + -OUS'},
+    {icon:'🎵',story:"Great kendama combos have a tempo — not too fast, not too slow. The ball swings, the hands move, everything flows at one pace.",
+     line:"The most satisfying combos to watch are those with a natural, _____ quality that makes each trick feel inevitable.",root:'RHYTHM',ok:['rhythmic'],strip:'adjective · think -IC',detail:'rhythmic — RHYTHM + -IC'},
+    {icon:'🧩',story:"Some players try the hardest tricks in competition — tricks they've landed once or twice in practice. It's a gamble.",
+     line:"The _____ approach is to build a core of tricks you land 90% of the time before adding higher-risk moves.",root:'SENSE',ok:['sensible'],strip:'adjective · think -IBLE (special spelling)',detail:'sensible — SENSE → SENSI + -BLE'},
+    {icon:'😬',story:"First time on stage at the KWC. The judges watching. The music playing. The crowd quiet. Your hands do something they've never done in practice.",
+     line:"Even experienced players admit to feeling _____ before a competition run, no matter how many times they've done it.",root:'NERVE',ok:['nervous'],strip:'adjective · think -OUS (drop the e)',detail:'nervous — NERVE → NERV + -OUS'},
+    {icon:'😰',story:"Competing in a foreign country — different language, different crowd expectations — adds a layer of difficulty that training rarely prepares you for.",
+     line:"The unfamiliar environment made some competitors feel _____, which showed in the tension of their early attempts.",root:'COMFORT',ok:['uncomfortable'],strip:'adjective · prefix UN- and suffix -ABLE',detail:'uncomfortable — UN- + COMFORT + -ABLE'},
+    {icon:'🚀',story:"A teenage player from Romania reaching the KWC podium. A beginner landing their first spike. Both require the same thing: someone who wanted it and went after it.",
+     line:"The goal of competing at KWC by age eighteen was _____, but his progress suggested it was entirely possible.",root:'AMBITION',ok:['ambitious'],strip:'adjective · think -OUS (drop -ion)',detail:'ambitious — AMBITION → AMBIT + -IOUS'},
+    {icon:'💪',story:"A spike looks gentle — the ball settling on the tip with barely a sound. But the controlled force behind it is significant: arm, wrist, and fingers all working together.",
+     line:"The most _____ element of a clean spike is how effortless it looks — pure control disguised as calm.",root:'POWER',ok:['powerful'],strip:'adjective · think -FUL',detail:'powerful — POWER + -FUL'}
+  ]},
+
+  {num:5,name:'Expert',focus:'Person nouns · -ATION · -EN · -ISE',sets:[
+    {icon:'🌐',story:"They arrived from Japan, Romania, the USA, France, Australia. Every one had spent years building their skill. The KWC brings together a very specific kind of athlete.",
+     line:"Each _____ in the professional division had qualified through a regional event before arriving in Hiroshima.",root:'COMPETE',ok:['competitor'],strip:'noun (person) · think -ITOR',detail:'competitor — COMPETE → COMPET + -ITOR'},
+    {icon:'📋',story:"The KWC doesn't happen by accident. Venue, judges, divisions, schedules, media — the team behind the event works for months before it opens.",
+     line:"The _____ of the KWC 2025 in Hiroshima was praised by players and visitors from every participating country.",root:'ORGANISE',ok:['organisation','organization'],strip:'noun · think -ATION',detail:'organisation — ORGANISE + -ATION'},
+    {icon:'🔬',story:"Precision is a skill you can lose. Even top players say — a week away from the kendama and the feel is different. You have to maintain it.",
+     line:"Regular daily practice is the only reliable way to _____ and maintain the fine motor skills that advanced kendama requires.",root:'SHARP',ok:['sharpen'],strip:'verb · think -EN',detail:'sharpen — SHARP + -EN'},
+    {icon:'🌍',story:"The kendama community started in Japan, spread to the US, then Europe. Now there are active communities on every continent.",
+     line:"Social media platforms helped to _____ the global appeal of kendama beyond its original Japanese roots.",root:'WIDE',ok:['widen'],strip:'verb · think -EN',detail:'widen — WIDE + -EN'},
+    {icon:'💪',story:"The grip demands more than people expect. Long combo sessions leave the forearm burning. That resistance builds a connection with the kendama that becomes automatic.",
+     line:"Consistent practice helps to _____ the forearm muscles and improve the fine motor control advanced tricks require.",root:'STRONG',ok:['strengthen'],strip:'verb · think -EN',detail:'strengthen — STRONG + -EN'},
+    {icon:'🎨',story:"The traditional Japanese kendama design has evolved. New shapes, new materials, new cup geometries — the sport looks different from fifteen years ago.",
+     line:"Equipment designers continued to _____ kendama shapes, improving balance and reducing the weight of the tama.",root:'MODERN',ok:['modernise','modernize'],strip:'verb · think -ISE or -IZE',detail:'modernise / modernize — MODERN + -ISE'},
+    {icon:'📱',story:"Behind the best players there's usually someone who spotted potential early and knew how to develop it. In kendama, this role is still emerging.",
+     line:"He found an online _____ who analysed his trick footage and helped fix the wrist angle on his spikes.",root:'TRAIN',ok:['trainer'],strip:'noun (person) · think -ER',detail:'trainer — TRAIN + -ER'},
+    {icon:'⬇️',story:"Some players are all-rounders. Others go deep in one area — vertical tricks, balance tricks — and build their whole identity around that speciality.",
+     line:"She chose to _____ in balance-based tricks, giving her a distinctive style that stood out in competition.",root:'SPECIAL',ok:['specialise','specialize'],strip:'verb · think -ISE or -IZE',detail:'specialise / specialize — SPECIAL + -ISE'},
+    {icon:'🥇',story:"The journey from beginner division to the KWC professional final can take years — or a decade. But every year a new face breaks through.",
+     line:"He became the youngest _____ in the professional division, reaching the final at just seventeen years old.",root:'FINAL',ok:['finalist'],strip:'noun · think -IST',detail:'finalist — FINAL + -IST'},
+    {icon:'📦',story:"Serious kendama players accumulate many models — different shapes for different tricks, limited editions, collaborative designs. The toy becomes an object of devotion.",
+     line:"His _____ of rare limited-edition kendamas filled an entire shelf — some never used, simply owned.",root:'COLLECT',ok:['collection'],strip:'noun · think -ION',detail:'collection — COLLECT + -ION'}
+  ]},
+
+  {num:6,name:'Master',focus:'Double changes · DIS-/UNDER-/IR-',sets:[
+    {icon:'💔',story:"He built the perfect combo in training that morning. Every trick landed, the transitions clean. Then the competition run began — and the first trick missed.",
+     line:"The _____ of missing his opening trick meant everything that followed felt like damage control.",root:'APPOINT',ok:['disappointment'],strip:'noun · prefix DIS- AND suffix -MENT',detail:'disappointment — DIS- + APPOINT + -MENT'},
+    {icon:'⚖️',story:"Some judges score on consistency; others reward ambition. When a player half-completes a risk, the panel doesn't always agree.",
+     line:"The _____ among the judges about how to score a partially landed trick sparked a wider debate.",root:'AGREE',ok:['disagreement'],strip:'noun · prefix DIS- AND suffix -MENT',detail:'disagreement — DIS- + AGREE + -MENT'},
+    {icon:'👻',story:"One minute he was warm-up, movements fluid. The moment competition started, the nerves simply changed everything.",
+     line:"The _____ of his usual fluid style the moment the judges started watching was a frustrating pattern to break.",root:'APPEAR',ok:['disappearance'],strip:'noun · prefix DIS- AND suffix -ANCE',detail:'disappearance — DIS- + APPEAR + -ANCE'},
+    {icon:'📊',story:"Everyone in the community knew his ability. He could land tricks in practice that professionals struggled with. Competition results never reflected it.",
+     line:"The gap between his practice and his competition results was a chronic _____ he couldn't explain.",root:'ACHIEVE',ok:['underachievement'],strip:'noun · prefix UNDER- AND suffix -MENT',detail:'underachievement — UNDER- + ACHIEVE + -MENT'},
+    {icon:'🧑‍🏫',story:"His mentor had been there for every stage of his development — online sessions, video calls after competitions, notes on technique. The relationship was everything.",
+     line:"The mentorship he received from a senior KWC competitor was _____ — it accelerated his development by years.",root:'VALUE',ok:['invaluable'],strip:'adjective · prefix IN- (means extremely valuable here)',detail:'invaluable — IN- + VALUE + -ABLE'},
+    {icon:'🪀',story:"A kendama that fits your hand perfectly — the right weight, the right cup shape, the right string tension — is hard to find. When you find it, you don't let it go.",
+     line:"He treated his competition kendama as if it were _____, wrapping it carefully after every session.",root:'REPLACE',ok:['irreplaceable'],strip:'adjective · prefix IR- AND suffix -ABLE',detail:'irreplaceable — IR- + REPLACE + -ABLE'},
+    {icon:'😤',story:"Six failed attempts at the same trick. You stop. You shake it out. You remember why you started. Then you go again.",
+     line:"Consecutive failures can be deeply _____, but experienced players learn to treat each attempt as completely separate.",root:'COURAGE',ok:['discouraging'],strip:'adjective · prefix DIS- AND suffix -ING',detail:'discouraging — DIS- + COURAGE + -ING'},
+    {icon:'🎯',story:"A common mistake in training is counting tricks that aren't fully clean — the ball wobbled but you count it anyway. It only slows real progress.",
+     line:"He was told never to _____ count a trick that wasn't fully landed — partial success is still failure in competition.",root:'HONEST',ok:['dishonestly'],strip:'adverb · prefix DIS- AND suffix -LY',detail:'dishonestly — DIS- + HONEST + -LY'},
+    {icon:'🏆',story:"The professionalisation of kendama means top players can now earn through sponsorship and teaching. But full-time careers remain rare.",
+     line:"The move to professional competition helped some elite players escape _____ and build careers around the sport.",root:'EMPLOY',ok:['unemployment'],strip:'noun · prefix UN- AND suffix -MENT',detail:'unemployment — UN- + EMPLOY + -MENT'},
+    {icon:'🔧',story:"Turning up to the KWC with a string that snaps during a run, or a cracked tama — that's not hard luck, that's preparation failure.",
+     line:"Arriving at the KWC without checking your equipment was, according to veteran players, completely _____ preparation.",root:'RESPONSIBLE',ok:['irresponsible'],strip:'adjective · prefix IR- (used before words starting with r)',detail:'irresponsible — IR- + RESPONSIBLE'}
+  ]},
+  {num:7,name:'Tactician',focus:'-AL · -ATION · MIS- · PRE-',sets:[
+    {icon:'🪀',story:"At the KWC, some of the most admired players still base their runs on the oldest techniques — simple, precise, unhurried.",
+     line:"His competition run was built around _____ kendama movements — nothing flashy, just clean execution of the fundamentals.",root:'TRADITION',ok:['traditional'],strip:'adjective · think -AL',detail:'traditional — TRADITION + -AL'},
+    {icon:'🎯',story:"A competition run lasts less than two minutes. In that time, a single blink of lost focus costs everything.",
+     line:"The level of _____ required to land a clean sixty-second run without a single mistake is genuinely exhausting.",root:'CONCENTRATE',ok:['concentration'],strip:'noun · think -TION',detail:'concentration — CONCENTRATE → CONCENTRAT + -ION'},
+    {icon:'😬',story:"He attempted the most difficult trick in his set — one requiring exact timing and a specific grip angle. He got it slightly wrong.",
+     line:"A tiny _____ in the release angle sent the tama off-course — his highest-scoring moment became his worst.",root:'CALCULATE',ok:['miscalculation'],strip:'noun · prefix MIS- AND suffix -TION',detail:'miscalculation — MIS- + CALCULATE → CALCULATION'},
+    {icon:'✨',story:"Most players built runs around difficulty. He built runs around beauty — unexpected flows between movements that nobody else would attempt.",
+     line:"His runs were the most _____ at the KWC — unusual transitions that no other player would have thought to combine.",root:'IMAGINE',ok:['imaginative'],strip:'adjective · think -ATIVE',detail:'imaginative — IMAGINE → IMAGIN + -ATIVE'},
+    {icon:'💼',story:"KWC 2026 is scheduled for November 21-22 — and for the first time, several sponsors are offering full contracts to the top finishers.",
+     line:"The sport has grown to the point where a small group of _____ players can now earn a living solely through kendama.",root:'PROFESSION',ok:['professional'],strip:'adjective · think -AL',detail:'professional — PROFESSION + -AL'},
+    {icon:'🗓️',story:"Ryoga Kawamoto, the 2025 KWC gold medalist from Japan, was known for arriving at every competition having practised each trick ten thousand times.",
+     line:"Kawamoto's _____ for each competition was meticulous — every trick in his run had been landed cleanly hundreds of times in training.",root:'PREPARE',ok:['preparation'],strip:'noun · think -ATION',detail:'preparation — PREPARE → PREPAR + -ATION'},
+    {icon:'🔧',story:"String tension, cup alignment, tama balance — experienced players check all of these before every single competition run. Thirty seconds, saves everything.",
+     line:"Checking string tension and tama condition before a run is a standard _____ that every serious competitor takes.",root:'CAUTION',ok:['precaution'],strip:'noun · prefix PRE- (before, to prevent problems)',detail:'precaution — PRE- + CAUTION'},
+    {icon:'🌍',story:"Before the KWC, many countries run their own qualifying events — a chance for players to represent their region at the highest level.",
+     line:"Winning the _____ qualifier earned Adrian Vilau the right to compete directly in the KWC finals bracket.",root:'NATION',ok:['national'],strip:'adjective · think -AL',detail:'national — NATION + -AL'},
+    {icon:'🎓',story:"The workshop before the KWC warm-up day gave spectators the chance to see top players explain their technique up close.",
+     line:"Kawamoto gave a _____ of his signature gravity pull — slow and deliberate, showing exactly how the wrist moves.",root:'DEMONSTRATE',ok:['demonstration'],strip:'noun · think -TION',detail:'demonstration — DEMONSTRATE → DEMONSTRAT + -ION'},
+    {icon:'🌟',story:"Nobody in the arena could explain what they'd just seen — the tama had left the cup, flipped twice, and landed spike-first with a sound like a small bell.",
+     line:"The crowd fell silent for one full second — then erupted. It was the most _____ moment the KWC stage had seen in years.",root:'MAGIC',ok:['magical'],strip:'adjective · think -AL',detail:'magical — MAGIC + -AL'}
+  ]},
+  {num:8,name:'Elite',focus:'OVER- · -ISM · -ITY · -FUL',sets:[
+    {icon:'😌',story:"After his qualifying run scored a near-perfect mark, the player walked into the final round relaxed — perhaps too relaxed.",
+     line:"He admitted afterwards that he had been _____ going into the final — he had stopped running through the hard tricks in his head.",root:'CONFIDENT',ok:['overconfident'],strip:'adjective · prefix OVER- (too much confidence)',detail:'overconfident — OVER- + CONFIDENT'},
+    {icon:'📱',story:"After a controversial judging decision at a regional competition, players and coaches posted their reaction online within minutes.",
+     line:"The _____ of the judging panel's call was swift — dozens of players posted frame-by-frame breakdowns within the hour.",root:'CRITIC',ok:['criticism'],strip:'noun · think -ICISM',detail:'criticism — CRITIC + -ISM → criticism'},
+    {icon:'🏆',story:"In the final minute of the team relay, with three mistakes already recorded, the last player stepped up and landed every trick cleanly.",
+     line:"What he showed in those final thirty seconds was nothing short of _____ — four clean tricks under pressure that changed the result.",root:'HERO',ok:['heroism'],strip:'noun · think -ISM',detail:'heroism — HERO + -ISM'},
+    {icon:'🎨',story:"The judges scored on difficulty and landing — but there was a creativity mark too, and this player had never repeated a trick combination in any competition.",
+     line:"The _____ of his run — not one trick combination borrowed from any previous finalist — earned him full marks on creativity.",root:'ORIGINAL',ok:['originality'],strip:'noun · think -ITY',detail:'originality — ORIGINAL + -ITY'},
+    {icon:'💥',story:"His string release generated far more force than necessary — the tama flew past the spike tip every time. Raw power, not control.",
+     line:"The force of his spike attempts was _____ — too much energy for the movement, sending the tama past the target each time.",root:'POWER',ok:['overpowering'],strip:'adjective · prefix OVER- AND suffix -ING',detail:'overpowering — OVER- + POWER + -ING'},
+    {icon:'🥉',story:"Adrian Vilau's KWC 2025 bronze-medal run included a transition between two gravity tricks that nobody in the building had seen linked before.",
+     line:"Adrian Vilau's bronze-medal run included a _____ gravity transition — two tricks linked in a way commentators had no words for.",root:'WONDER',ok:['wonderful'],strip:'adjective · think -FUL',detail:'wonderful — WONDER + -FUL'},
+    {icon:'🧠',story:"The player had practised the trick a thousand times. On stage he started analysing every detail — grip, angle, timing — and missed it completely.",
+     line:"He knew the trick. He'd landed it cleanly all week. But on stage he started _____ every detail and the muscle memory collapsed.",root:'THINK',ok:['overthinking'],strip:'noun · prefix OVER- AND suffix -ING',detail:'overthinking — OVER- + THINK + -ING'},
+    {icon:'🌟',story:"Every top-level player becomes associated with one trick type over time — the thing they do better than anyone else at the tournament.",
+     line:"His _____ was the lighthouse — a movement so consistently clean that other players studied his videos for that trick alone.",root:'SPECIAL',ok:['speciality','specialty'],strip:'noun · think -ITY',detail:'speciality — SPECIAL + -ITY'},
+    {icon:'😱',story:"The tama left the cup, bounced twice off the string, and somehow landed on the spike. The player stood completely still for three seconds.",
+     line:"Few moments in kendama history were as _____ — a tama that should have fallen somehow found the spike after two bounces.",root:'DRAMA',ok:['dramatic'],strip:'adjective · think -IC',detail:'dramatic — DRAMA → DRAMAT + -IC'},
+    {icon:'🎯',story:"The winning run at KWC required not just difficulty but control — every movement precise, every landing absorbed quietly into the next.",
+     line:"The most _____ players at the KWC were not always those attempting the hardest tricks — they were the ones landing them cleanly.",root:'SKILL',ok:['skilful','skillful'],strip:'adjective · think -FUL',detail:'skilful — SKILL → SKIL + -FUL (one L drops)'}
+  ]},
+  {num:9,name:'Pro Plus',focus:'IN-/IL-/IM-/UN- · -EN',sets:[
+    {icon:'🤲',story:"The nerves in the final round were unlike anything he'd experienced. His hands were shaking. Tricks he could do in his sleep felt impossible.",
+     line:"Under the pressure of the final, he seemed completely _____ of landing tricks he had been hitting cleanly all morning.",root:'CAPABLE',ok:['incapable'],strip:'adjective · negative prefix IN-',detail:'incapable — IN- + CAPABLE'},
+    {icon:'💔',story:"The timer was still running when the string snapped — the tama dropped and the run ended. The judges had no choice.",
+     line:"A snapped string with eight seconds remaining left the run _____ — the judges could only score the tricks already landed.",root:'COMPLETE',ok:['incomplete'],strip:'adjective · negative prefix IN-',detail:'incomplete — IN- + COMPLETE'},
+    {icon:'🚫',story:"Gripping the tama with two hands during a trick is not permitted. Video review showed a second finger curl during the sequence.",
+     line:"The judges ruled that the grip used during the third trick was _____ — a review showed a second finger touching the tama.",root:'LEGAL',ok:['illegal'],strip:'adjective · negative prefix IL- (used before L)',detail:'illegal — IL- + LEGAL'},
+    {icon:'⏩',story:"In practice, rushing the setup for a trick is one of the most common causes of misses — a fraction of a second not waited, and it's gone.",
+     line:"When he began missing tricks he usually landed, his coach's diagnosis was simple: he was being _____ with his setup rhythm.",root:'PATIENT',ok:['impatient'],strip:'adjective · negative prefix IM- (used before P)',detail:'impatient — IM- + PATIENT'},
+    {icon:'🎯',story:"Three consecutive missed spikes. Each one landing a centimetre to the left. He stopped, checked his string, and found the knot had shifted.",
+     line:"His spike attempts had become _____ due to a shifted string knot — the tama was tilting slightly on every release.",root:'ACCURATE',ok:['inaccurate'],strip:'adjective · negative prefix IN-',detail:'inaccurate — IN- + ACCURATE'},
+    {icon:'🤦',story:"The coach advised a simpler run — fewer tricks, cleaner execution. The player ignored this and attempted the hardest set of his life. He missed five of ten.",
+     line:"It was _____ to attempt his most difficult run ever in the finals after two weeks without practice — his coach had warned him.",root:'LOGIC',ok:['illogical'],strip:'adjective · negative prefix IL- AND suffix -AL',detail:'illogical — IL- + LOGIC + -AL'},
+    {icon:'🔩',story:"Midway through warm-up, the string had loosened from repeated use. He found a quiet corner and fixed it in thirty seconds.",
+     line:"He paused before his second warm-up run to _____ the string — loose tension was adding an unpredictable element to every trick.",root:'TIGHT',ok:['tighten'],strip:'verb · add -EN (make tight)',detail:'tighten — TIGHT + -EN'},
+    {icon:'🧵',story:"Some players prefer higher string tension; others need more slack. Learning which you prefer takes experimentation and patience.",
+     line:"His coach suggested he _____ the string slightly to allow more swing on the longer lighthouse tricks he was attempting.",root:'LOOSE',ok:['loosen'],strip:'verb · add -EN (make loose)',detail:'loosen — LOOSE + -EN'},
+    {icon:'🎨',story:"He had painted his tama a deep red before the competition — it caught the stage lights perfectly and lifted his mood each time he picked it up.",
+     line:"Choosing a vibrant tama colour had done more than look good — it seemed to _____ his whole attitude during competition.",root:'BRIGHT',ok:['brighten'],strip:'verb · add -EN (make brighter)',detail:'brighten — BRIGHT + -EN'},
+    {icon:'💪',story:"Losing three finals in a row had been brutal. But every player who went on to win had been through exactly this kind of pain first.",
+     line:"Three consecutive final defeats had done something unexpected — they seemed to _____ the young player's resolve rather than break it.",root:'HARD',ok:['harden'],strip:'verb · add -EN (make tough)',detail:'harden — HARD + -EN'}
+  ]},
+  {num:10,name:'Champion',focus:'Mixed B1 patterns',sets:[
+    {icon:'🥇',story:"Ryoga Kawamoto's KWC 2025 gold medal run was the result of years of discipline that most people watching had never seen.",
+     line:"Kawamoto's _____ defence of his title was built on preparation nobody had witnessed — ten-hour practice days for six months.",root:'SUCCESS',ok:['successful'],strip:'adjective · think -FUL',detail:'successful — SUCCESS → SUCCESSF + -UL'},
+    {icon:'🎲',story:"A gravity trick or a traditional swing combo — both equally risky for the final run. He had thirty seconds to choose.",
+     line:"The _____ to open with the gravity trick rather than the swing combo was the moment that defined his entire final round.",root:'DECIDE',ok:['decision'],strip:'noun · think -ION (spelling changes)',detail:'decision — DECIDE → DECIS + -ION'},
+    {icon:'📺',story:"He had watched three hundred competition videos. He knew each judge's preferred scoring style and which tricks they rewarded most.",
+     line:"His deep _____ of what each judge valued let him design a run that felt spontaneous but was calculated to the last trick.",root:'KNOW',ok:['knowledge'],strip:'noun · irregular form — spelling changes',detail:'knowledge — KNOW → KNOWL + -EDGE'},
+    {icon:'👑',story:"In the team relay, the most experienced player went last — not because he demanded it, but because everyone on the team chose him.",
+     line:"His _____ in the relay was quiet but unmistakable — he organised warm-up, managed nerves, and anchored the final slot.",root:'LEAD',ok:['leadership'],strip:'noun · think -SHIP',detail:'leadership — LEAD + -ER + -SHIP → leadership'},
+    {icon:'🌀',story:"Most top players have a recognisable style. This competitor had none — every run at every competition was completely different.",
+     line:"His runs were completely _____ — no rival could study previous footage and anticipate what trick he would open with next.",root:'PREDICT',ok:['unpredictable'],strip:'adjective · prefix UN- AND suffix -ABLE',detail:'unpredictable — UN- + PREDICT + -ABLE'},
+    {icon:'🔥',story:"As prize money and sponsorship entered kendama, the atmosphere at tournaments shifted. Friendliness remained — but so did real stakes.",
+     line:"The atmosphere at KWC had become intensely _____ — warm in the practice area, fierce when the judges started scoring.",root:'COMPETE',ok:['competitive'],strip:'adjective · think -ITIVE (spelling changes)',detail:'competitive — COMPETE → COMPETI + -TIVE'},
+    {icon:'📱',story:"Adrian Vilau had started kendama after watching a video of a Japanese player online at age nine. That video had forty-six views at the time.",
+     line:"He told the KWC crowd that the _____ for his entire journey was a forty-six-view video he had found at the age of nine.",root:'INSPIRE',ok:['inspiration'],strip:'noun · think -ATION',detail:'inspiration — INSPIRE → INSPIR + -ATION'},
+    {icon:'🚀',story:"He had missed the KWC final cut three years in a row. Each time he came back. The fourth year, he reached the podium.",
+     line:"Three consecutive qualifying failures had done nothing to reduce his _____ — each near-miss made him train harder.",root:'DETERMINE',ok:['determination'],strip:'noun · think -ATION',detail:'determination — DETERMINE → DETERMIN + -ATION'},
+    {icon:'😰',story:"The KWC stage holds two thousand spectators. For a player used to practising alone in a bedroom, the switch is enormous.",
+     line:"The _____ of appearing on the KWC main stage for the first time — two thousand faces, total silence — affected every first-timer.",root:'NERVE',ok:['nervousness'],strip:'noun · two changes: -OUS then -NESS',detail:'nervousness — NERVE → NERVOUS + -NESS'},
+    {icon:'🏆',story:"Kawamoto's qualifying scores were so far above anyone else's that coaches had stopped discussing how to match him — only how to score second.",
+     line:"His qualifying scores were so far ahead that rivals had accepted he was _____ in that format — the fight was for second place.",root:'BEAT',ok:['unbeatable'],strip:'adjective · prefix UN- AND suffix -ABLE',detail:'unbeatable — UN- + BEAT + -ABLE'}
+  ]}
+  ]
+},
+
+perfume:{
+  label:'Fragrance', emoji:'🌸', cls:'tp',
+  color:'#ffd166',
+  levels:[
+  {num:1,name:'Starter',focus:'-ment · -tion · -ive · -ory',sets:[
+    {icon:'✨',story:"A great fragrance doesn't shout. It introduces itself slowly — a little warmth as someone passes, a quiet presence after you've left. That understated quality is hard to achieve.",
+     line:"A truly great fragrance should be quietly _____ — noticed without ever needing to announce itself.",root:'ATTRACT',ok:['attractive'],strip:'adjective · think -IVE',detail:'attractive — ATTRACT + -IVE'},
+    {icon:'🗺️',story:"Master perfumers describe their work the way writers describe novels — always trying to tell a story. Some fragrances evoke a place, a season, a memory that hasn't happened yet.",
+     line:"The perfumer's _____ was to capture the feeling of a warm evening in a Moroccan market at dusk.",root:'INTEND',ok:['intention'],strip:'noun · think -TION',detail:'intention — INTEND → INTEN + -TION'},
+    {icon:'🧪',story:"A single high-quality fragrance may contain over two hundred ingredients — from transparent citrus top notes to rich base notes like oud and sandalwood.",
+     line:"The sheer _____ of ingredients in a quality fragrance is what gives it depth and genuine complexity.",root:'VARY',ok:['variety'],strip:'noun · think -IETY (spelling changes)',detail:'variety — VARY → VARI + -ETY'},
+    {icon:'🎨',story:"Perfumery sits at the edge of chemistry and art. Ingredients have molecular weights and evaporation rates — but in the end, the question is: does this feel right?",
+     line:"Perfumery is both a scientific discipline and a deeply _____ art form that rewards instinct as much as knowledge.",root:'CREATE',ok:['creative'],strip:'adjective · think -IVE',detail:'creative — CREATE → CREAT + -IVE'},
+    {icon:'🎵',story:"An accord in perfumery works like a chord in music — individual notes that, blended, produce something entirely new. Cedar alone smells like pencils. Together with vetiver it can smell like a quiet forest.",
+     line:"The _____ of cedarwood and fresh citrus creates a clean, modern opening that carries the fragrance forward.",root:'COMBINE',ok:['combination'],strip:'noun · think -TION (spelling changes)',detail:'combination — COMBINE → COMBIN + -ATION'},
+    {icon:'👤',story:"The same fragrance smells completely different on two people. Skin chemistry, body warmth, even diet change how a scent develops. Paper strips tell you almost nothing.",
+     line:"Sillage — the trail a fragrance leaves — makes the same cologne smell _____ on every person who wears it.",root:'DIFFER',ok:['different'],strip:'adjective · think -ENT',detail:'different — DIFFER + -ENT'},
+    {icon:'🌑',story:"Oud comes from infected agarwood trees and can take decades to develop. One kilogram of the highest-quality oud can cost more than a luxury car — yet even a trace transforms a fragrance.",
+     line:"Base notes like oud and dark amber add a powerful _____ that lingers on warm skin for eight hours or more.",root:'INTENSE',ok:['intensity'],strip:'noun · think -ITY',detail:'intensity — INTENSE → INTENS + -ITY'},
+    {icon:'🪞',story:"No one can tell you what your fragrance should be. Reviews guide, friends suggest — but the moment you spray something and it simply feels like you, that's the one.",
+     line:"Choosing a signature fragrance is a deeply _____ decision — it should feel like an extension of who you are.",root:'PERSON',ok:['personal'],strip:'adjective · think -AL',detail:'personal — PERSON + -AL'},
+    {icon:'⏳',story:"Eau de toilette and eau de parfum sound similar, but the difference in longevity on skin is significant. A fine EDP can still be detectable hours after you've left a room.",
+     line:"The _____ power of a quality eau de parfum sets it apart from cheaper alternatives that fade within the first hour.",root:'LAST',ok:['lasting'],strip:'adjective · think -ING',detail:'lasting — LAST + -ING'},
+    {icon:'🧠',story:"The part of the brain that processes smell connects directly to the memory centre. A single whiff of something can instantly take you back years — to a person, a place, a specific afternoon.",
+     line:"Fragrance works through _____ memory — a scent can transport you to a specific moment more powerfully than any photograph.",root:'SENSE',ok:['sensory'],strip:'adjective · think -ORY',detail:'sensory — SENSE → SENS + -ORY'}
+  ]},
+
+  {num:2,name:'Building',focus:'Adverbs -ly · -ness · -EN · UN-',sets:[
+    {icon:'💨',story:"Some fragrances are built for speed — grab, spray, go. They don't demand attention. They just do their job and step back.",
+     line:"He spritzed _____ before leaving the house, knowing the scent would settle and bloom within twenty minutes.",root:'QUICK',ok:['quickly'],strip:'adverb · think -LY',detail:'quickly — QUICK + -LY'},
+    {icon:'🌊',story:"The best fragrances don't announce themselves in stages. Top, heart, base don't arrive like separate trains — they blend, each note handing off to the next.",
+     line:"The transition from the fresh bergamot opening to the warm sandalwood heart developed _____, with no jarring shift.",root:'SMOOTH',ok:['smoothly'],strip:'adverb · think -LY',detail:'smoothly — SMOOTH + -LY'},
+    {icon:'📢',story:"Fragrance marketing is a multi-billion-pound industry. The image, the bottle, the campaign — before you smell anything, you've already been told how to feel.",
+     line:"Growing _____ of marketing techniques helped him make more independent choices when testing new fragrances.",root:'AWARE',ok:['awareness'],strip:'noun · think -NESS',detail:'awareness — AWARE + -NESS'},
+    {icon:'🎯',story:"Pulse points — wrists, neck, inside the elbow — are where body heat is highest. Getting the placement right changes everything about how a fragrance develops.",
+     line:"He applied the eau de parfum _____ to his wrist and neck, avoiding rubbing so the top notes could open naturally.",root:'CARE',ok:['carefully'],strip:'adverb · think -FULLY',detail:'carefully — CARE + -FULLY'},
+    {icon:'🌙',story:"A masculine oriental fragrance built on oud and leather changes character as the day progresses. The opening is almost bright. By evening it becomes something else entirely.",
+     line:"As _____ fell, the heavier base notes came through and the whole character of the scent shifted completely.",root:'DARK',ok:['darkness'],strip:'noun · think -NESS',detail:'darkness — DARK + -NESS'},
+    {icon:'🪨',story:"A very sharp cedar or aldehydic top note can feel aggressive at first spray. Perfumers use musk or amber in the base specifically to counterbalance this.",
+     line:"The amber accord was added to _____ the sharp, almost harsh edge of the opening citrus notes.",root:'SOFT',ok:['soften'],strip:'verb · think -EN',detail:'soften — SOFT + -EN'},
+    {icon:'📦',story:"A cheap-looking bottle can make people dismiss what's inside before they've even smelled it. Packaging prejudice is very real in the fragrance world.",
+     line:"The fragrance was _____ dismissed by reviewers who judged the bottle design before testing the scent itself.",root:'FAIR',ok:['unfairly'],strip:'adverb · prefix UN- and suffix -LY',detail:'unfairly — UN- + FAIR + -LY'},
+    {icon:'💰',story:"Quality fragrance doesn't have to be expensive. Some of the most-complimented everyday fragrances cost very little per bottle.",
+     line:"A great fragrance can _____ be found at a modest price — the most expensive bottle is not always the best.",root:'EASY',ok:['easily'],strip:'adverb · think -LY (y → i spelling change)',detail:'easily — EASY → EASI + -LY'},
+    {icon:'🌅',story:"Base notes are the last to arrive and the first to define memory. Sandalwood, vetiver, and musks emerge late in the fragrance's life and stay for hours.",
+     line:"The warm sandalwood base developed _____ through the afternoon, becoming the dominant note by early evening.",root:'SLOW',ok:['slowly'],strip:'adverb · think -LY',detail:'slowly — SLOW + -LY'},
+    {icon:'☀️',story:"Citrus top notes — bergamot, lemon, grapefruit — give a fragrance its opening impact. That immediate freshness is one of the hardest feelings to replicate artificially.",
+     line:"The _____ of the citrus opening made the fragrance feel energising and clean in the first minutes after application.",root:'BRIGHT',ok:['brightness'],strip:'noun · think -NESS',detail:'brightness — BRIGHT + -NESS'}
+  ]},
+
+  {num:3,name:'Intermediate',focus:'-ance/-ence · -ity · -ship',sets:[
+    {icon:'🏗️',story:"Every component of a fragrance serves a purpose. Top notes attract, heart notes seduce, base notes hold everything together and define how you are remembered.",
+     line:"Expert perfumers emphasise the _____ of well-chosen base notes in making a fragrance feel complete and long-lasting.",root:'IMPORTANT',ok:['importance'],strip:'noun · think -ANCE',detail:'importance — IMPORTANT → IMPORT + -ANCE'},
+    {icon:'💪',story:"A great fragrance does something psychological — it changes how you enter a room, how you carry yourself. This effect is well-documented.",
+     line:"Many fragrance lovers report that the right scent gives them a deep sense of _____ that's difficult to explain.",root:'CONFIDENT',ok:['confidence'],strip:'noun · think -ENCE',detail:'confidence — CONFIDENT → CONFID + -ENCE'},
+    {icon:'🕐',story:"Evaluating a new fragrance properly takes time. A paper strip gives you the opening. Skin gives you the first hour. The full picture arrives three or four hours in.",
+     line:"Proper fragrance testing requires _____ — you can't judge a scent by its first ten minutes on a paper strip.",root:'PATIENT',ok:['patience'],strip:'noun · think -ENCE (patient → patience)',detail:'patience — PATIENT → PATI + -ENCE'},
+    {icon:'⏳',story:"Certain fragrances achieve cultural status — they become shorthand for an era, a style, a season. Their identity transcends the bottle they come in.",
+     line:"The enduring _____ of classic masculine fragrances shows how powerful a well-constructed scent can become.",root:'POPULAR',ok:['popularity'],strip:'noun · think -ITY',detail:'popularity — POPULAR + -ITY'},
+    {icon:'📸',story:"Fragrance photography always shows golden bottles and dark rooms. The reality of how most people actually use fragrance is far more ordinary — and far more personal.",
+     line:"The _____ of daily fragrance use is far more personal and specific than any advertisement ever captures.",root:'REAL',ok:['reality'],strip:'noun · think -ITY',detail:'reality — REAL + -ITY'},
+    {icon:'🌱',story:"Some fragrance ingredients come from endangered plants. Ethical perfumery asks where materials come from and what impact extraction has on ecosystems.",
+     line:"Ethical fragrance brands take _____ for where their ingredients are sourced and how they are extracted.",root:'RESPONSIBLE',ok:['responsibility'],strip:'noun · think -ITY (drop -ble)',detail:'responsibility — RESPONSIBLE → RESPONSIBILI + -TY'},
+    {icon:'🤫',story:"There's a category called 'skin scents' — fragrances that project so softly they're almost private. Only the wearer knows they're there.",
+     line:"Some wearers prefer the _____ of a skin scent that only reveals itself to someone who comes very close.",root:'SILENT',ok:['silence'],strip:'noun · -CE suffix (adjective → noun)',detail:'silence — SILENT → SILEN + -CE'},
+    {icon:'🧫',story:"Natural musks and ambers are designed to hold. The base notes are formulated to resist washing, to stay, to outlast everything applied on top.",
+     line:"The _____ of certain musk molecules to washing means base notes can be detected even a day after application.",root:'RESIST',ok:['resistance'],strip:'noun · think -ANCE',detail:'resistance — RESIST + -ANCE'},
+    {icon:'👥',story:"Fragrance communities are known for their generosity — strangers sharing samples, posting detailed reviews, helping each other identify what they're smelling.",
+     line:"The _____ between fragrance enthusiasts who had never met in person is a feature of online collector communities.",root:'FRIEND',ok:['friendship'],strip:'noun · think -SHIP',detail:'friendship — FRIEND + -SHIP'},
+    {icon:'👑',story:"The great perfume houses — Chanel, Hermès, Creed — are led by a master perfumer whose vision defines the house style across decades.",
+     line:"The creative _____ of a respected master perfumer can define a fragrance house's identity for generations.",root:'LEAD',ok:['leadership'],strip:'noun · think -SHIP',detail:'leadership — LEAD + -ERSHIP'}
+  ]},
+
+  {num:4,name:'Advancing',focus:'-ous/-ious · -able · -less · -ish',sets:[
+    {icon:'📜',story:"Some fragrances have been sold continuously for over a century. Formulas evolve, bottles change, audiences shift — but the name carries on.",
+     line:"One of the most _____ masculine fragrances in the world has been in continuous production since the early twentieth century.",root:'FAME',ok:['famous'],strip:'adjective · think -OUS (fame → famous)',detail:'famous — FAME → FAM + -OUS'},
+    {icon:'💎',story:"There's a weight, a presence, a quietness to premium ingredients that synthetics can't quite replicate. The difference between a cheap cologne and a fine parfum is mostly felt, not explained.",
+     line:"The _____ feel of aged oud and Madagascar vanilla made the fragrance seem far beyond its price.",root:'LUXURY',ok:['luxurious'],strip:'adjective · think -IOUS (luxury → luxurious)',detail:'luxurious — LUXURY → LUXURI + -OUS'},
+    {icon:'🌫️',story:"Some fragrances resist easy description. You smell something familiar — a memory, a place — but you can't name the notes. That ambiguity is sometimes the point.",
+     line:"The dark, smoky base notes gave the fragrance a deliberately _____ quality that reviewers found difficult to describe.",root:'MYSTERY',ok:['mysterious'],strip:'adjective · think -IOUS (mystery → mysterious)',detail:'mysterious — MYSTERY → MYSTERI + -OUS'},
+    {icon:'🏅',story:"Creating a fragrance that works on all skin types, in all climates, on all occasions — that is an extraordinarily rare achievement in perfumery.",
+     line:"The house's _____ ability to produce consistently well-received fragrances year after year speaks to extraordinary talent.",root:'REMARK',ok:['remarkable'],strip:'adjective · think -ABLE',detail:'remarkable — REMARK + -ABLE'},
+    {icon:'🌊',story:"The fragrance market is one of the most difficult to forecast. Trends arrive quickly, collapse just as fast, and what works one season can feel dated the next.",
+     line:"Consumer taste in fragrance is famously _____ — what seems certain to succeed in January can feel stale by autumn.",root:'PREDICT',ok:['unpredictable'],strip:'adjective · prefix UN- and suffix -ABLE',detail:'unpredictable — UN- + PREDICT + -ABLE'},
+    {icon:'🧩',story:"Fragrance layering — applying two complementary scents together — can be extraordinary. But it requires careful thought about which notes will harmonise.",
+     line:"The _____ approach to layering is to start with products from the same house, whose notes have been designed to work together.",root:'SENSE',ok:['sensible'],strip:'adjective · think -IBLE (special spelling)',detail:'sensible — SENSE → SENSI + -BLE'},
+    {icon:'🏛️',story:"A fragrance that opens with bergamot, moves through violet and iris, closes on vetiver and amber — describing it sounds like architecture.",
+     line:"The project of creating a genuinely new masculine fragrance was _____, but the master perfumer had the skill to see it through.",root:'AMBITION',ok:['ambitious'],strip:'adjective · think -OUS (drop -ion)',detail:'ambitious — AMBITION → AMBIT + -IOUS'},
+    {icon:'🧴',story:"Consumer safety testing applies fragrances to skin under controlled conditions. Most modern ingredients, at proper concentrations, are entirely safe.",
+     line:"The ingredient was classified as completely _____ at the concentrations used in the final commercial formula.",root:'HARM',ok:['harmless'],strip:'adjective · think -LESS',detail:'harmless — HARM + -LESS'},
+    {icon:'😬',story:"A perfumer presenting a new fragrance to the creative director — after months of development — carries a very specific kind of tension.",
+     line:"Even experienced perfumers feel _____ when presenting a new brief to a client for the very first time.",root:'NERVE',ok:['nervous'],strip:'adjective · think -OUS (drop the e)',detail:'nervous — NERVE → NERV + -OUS'},
+    {icon:'🌀',story:"Some fragrances are deliberately challenging — built to provoke rather than please, to create a reaction rather than compliments.",
+     line:"Some niche fragrances are intentionally _____, designed to challenge the wearer's expectations rather than conform to mainstream taste.",root:'COMFORT',ok:['uncomfortable'],strip:'adjective · prefix UN- and suffix -ABLE',detail:'uncomfortable — UN- + COMFORT + -ABLE'}
+  ]},
+
+  {num:5,name:'Expert',focus:'Person nouns · -ATION · -EN · -ISE',sets:[
+    {icon:'🧑‍🔬',story:"Behind every fragrance is a person who spent weeks, sometimes years, blending and discarding until something true emerged. These are rarely the faces in the advertisements.",
+     line:"The _____ of the fragrance spent three years researching traditional Moroccan ingredients before beginning the actual blending.",root:'CREATE',ok:['creator'],strip:'noun (person) · think -OR (create → creator)',detail:'creator — CREATE → CREAT + -OR'},
+    {icon:'📦',story:"Fragrance collecting has its own culture — rare vintage bottles, discontinued editions, regional exclusives. Some collections are worth tens of thousands of pounds.",
+     line:"As a serious _____, he had over two hundred bottles on his shelves — each one acquired for a specific reason.",root:'COLLECT',ok:['collector'],strip:'noun (person) · think -OR',detail:'collector — COLLECT + -OR'},
+    {icon:'🌑',story:"A fragrance is not static — it develops over time. The opening is just the introduction. The base is where the true character is finally revealed.",
+     line:"As the day progresses, the oud note begins to _____ and the fragrance becomes richer and more complex.",root:'DEEP',ok:['deepen'],strip:'verb · think -EN',detail:'deepen — DEEP + -EN'},
+    {icon:'🪨',story:"Rough, sharp woody notes can divide opinion. Perfumers sometimes add small amounts of musk or vanilla specifically to make the overall effect more approachable.",
+     line:"The addition of a small amount of Tonka bean was used to _____ the harder edge of the cedar and vetiver accord.",root:'SOFT',ok:['soften'],strip:'verb · think -EN',detail:'soften — SOFT + -EN'},
+    {icon:'📋',story:"Classic fragrances are periodically reformulated — sometimes by choice, sometimes due to ingredient restrictions. The challenge is keeping the character while adapting.",
+     line:"The house had to _____ the formula after several natural ingredients were restricted under new EU regulations.",root:'MODERN',ok:['modernise','modernize'],strip:'verb · think -ISE or -IZE',detail:'modernise / modernize — MODERN + -ISE'},
+    {icon:'🌳',story:"Some perfumers work across every category. Others dedicate their careers to a single family — exclusively woody, exclusively aquatic. That depth produces extraordinary results.",
+     line:"The master perfumer chose to _____ in amber and wood-based compositions, becoming one of the leading voices in that tradition.",root:'SPECIAL',ok:['specialise','specialize'],strip:'verb · think -ISE or -IZE',detail:'specialise / specialize — SPECIAL + -ISE'},
+    {icon:'💪',story:"Some natural ingredients lose their impact when diluted into alcohol. Perfumers use fixatives — materials that bind and hold volatile molecules — to address this.",
+     line:"Certain fixatives are added to _____ the sillage and improve the fragrance's projection in the first hour after application.",root:'STRONG',ok:['strengthen'],strip:'verb · think -EN',detail:'strengthen — STRONG + -EN'},
+    {icon:'🍋',story:"Citrus top notes degrade faster than other ingredients. Perfumers test their citrus oils frequently — bergamot in particular loses its vitality within months of distillation.",
+     line:"Fresh bergamot oil was added to _____ the opening impact and ensure the first impression stayed bright and clean.",root:'SHARP',ok:['sharpen'],strip:'verb · think -EN',detail:'sharpen — SHARP + -EN'},
+    {icon:'🏭',story:"Behind a major fragrance house is a complex operation — raw material procurement, lab testing, regulatory compliance, marketing, global distribution.",
+     line:"The _____ of the annual launch required months of coordination between the laboratory, creative team, and marketing department.",root:'ORGANISE',ok:['organisation','organization'],strip:'noun · think -ATION',detail:'organisation — ORGANISE + -ATION'},
+    {icon:'🍂',story:"Fragrance houses release new editions regularly — seasonal, limited, anniversary. The result is a growing library of related scents, each one connected by the house's DNA.",
+     line:"The autumn _____ from the house included three new compositions, each exploring a different interpretation of vetiver.",root:'PRODUCE',ok:['production'],strip:'noun · think -TION',detail:'production — PRODUCE → PRODUC + -TION'}
+  ]},
+
+  {num:6,name:'Master',focus:'Double changes · DIS-/UN-/IR-/UNDER-',sets:[
+    {icon:'💔',story:"You've waited weeks for a decant. Read every review. You spray it — and it smells nothing like what you imagined. It happens more often than people admit.",
+     line:"The _____ of discovering that a highly anticipated fragrance performed entirely differently on his skin was familiar to every collector.",root:'APPOINT',ok:['disappointment'],strip:'noun · prefix DIS- AND suffix -MENT',detail:'disappointment — DIS- + APPOINT + -MENT'},
+    {icon:'⚖️',story:"Two experienced reviewers can smell the same bottle and come away with completely different impressions. That tension is part of what makes the hobby interesting.",
+     line:"There was significant _____ among reviewers about whether the reformulation was better or worse than the original.",root:'AGREE',ok:['disagreement'],strip:'noun · prefix DIS- AND suffix -MENT',detail:'disagreement — DIS- + AGREE + -MENT'},
+    {icon:'🎭',story:"Fragrance brands sometimes describe their ingredients in ways that imply more natural content than is actually present. Marketing language and ingredient reality don't always align.",
+     line:"Some brands _____ suggest their fragrances are natural when synthetic molecules make up the majority of the formula.",root:'HONEST',ok:['dishonestly'],strip:'adverb · prefix DIS- AND suffix -LY',detail:'dishonestly — DIS- + HONEST + -LY'},
+    {icon:'💡',story:"The ability to identify fragrance families by smell — woody, floral, oriental — turns every testing session into a lesson. That knowledge compounds over time.",
+     line:"The ability to recognise fragrance families by smell proved _____ when trying to identify what he liked and why.",root:'VALUE',ok:['invaluable'],strip:'adjective · prefix IN- (means extremely valuable — not negative here)',detail:'invaluable — IN- + VALUE + -ABLE'},
+    {icon:'🏺',story:"A vintage bottle of a discontinued fragrance can sell for hundreds of times its original price. The formula no longer exists. No recreation can fully substitute for the original.",
+     line:"A discontinued vintage formulation is often considered _____ — no modern recreation, however faithful, can fully replicate it.",root:'REPLACE',ok:['irreplaceable'],strip:'adjective · prefix IR- AND suffix -ABLE',detail:'irreplaceable — IR- + REPLACE + -ABLE'},
+    {icon:'💨',story:"Longevity is a real issue for many buyers — a fragrance that disappears within two hours is frustrating, especially at higher price points.",
+     line:"The quick _____ of the top notes was expected, but the complete fade of the base within two hours left buyers disappointed.",root:'APPEAR',ok:['disappearance'],strip:'noun · prefix DIS- AND suffix -ANCE',detail:'disappearance — DIS- + APPEAR + -ANCE'},
+    {icon:'📊',story:"Some ingredients have enormous potential — rare ambers, natural oud resins, aged musks — but require skill and restraint to use well. Bad formulation wastes extraordinary raw materials.",
+     line:"Critics pointed to the _____ of the formula — exceptional raw materials deployed without the vision to make them memorable.",root:'ACHIEVE',ok:['underachievement'],strip:'noun · prefix UNDER- AND suffix -MENT',detail:'underachievement — UNDER- + ACHIEVE + -MENT'},
+    {icon:'💬',story:"Reading fragrance reviews before buying can be overwhelming. Negative reviews of something you love, or five stars for something cold — the hobby can feel confusing at first.",
+     line:"The wall of conflicting online reviews was _____ for a newcomer trying to understand what their own tastes actually were.",root:'COURAGE',ok:['discouraging'],strip:'adjective · prefix DIS- AND suffix -ING',detail:'discouraging — DIS- + COURAGE + -ING'},
+    {icon:'🌿',story:"The natural fragrance ingredient industry — small farms growing specific plants, traditional distillers — is vulnerable to synthetic substitution. Livelihoods follow demand.",
+     line:"The shift toward synthetic alternatives created _____ among the traditional growers of natural fragrance ingredients in rural communities.",root:'EMPLOY',ok:['unemployment'],strip:'noun · prefix UN- AND suffix -MENT',detail:'unemployment — UN- + EMPLOY + -MENT'},
+    {icon:'🚫',story:"Applying a powerful fragrance in a small, confined space — a tiny office, a crowded bus — without considering others is the classic fragrance etiquette failure.",
+     line:"Applying a heavy sillage fragrance in a small office without considering colleagues first was seen as completely _____ behaviour.",root:'RESPONSIBLE',ok:['irresponsible'],strip:'adjective · prefix IR- (used before words starting with r)',detail:'irresponsible — IR- + RESPONSIBLE'}
+  ]},
+  {num:7,name:'Tactician',focus:'-AL · -ATION · MIS- · PRE-',sets:[
+    {icon:'🧪',story:"The master perfumer at Aramis had spent twenty-five years blending fragrances — and still treated every new formula like an exam paper.",
+     line:"What made his work instantly recognisable was the _____ discipline he applied to every formula — nothing left to chance.",root:'PROFESSION',ok:['professional'],strip:'adjective · think -AL',detail:'professional — PROFESSION + -AL'},
+    {icon:'🌿',story:"While 2026 releases chased trends in boozy notes and honey accords, a few houses returned to the austere elegance of chypre and fougère.",
+     line:"The house built its reputation on _____ fougère structures — lavender, oakmoss, coumarin — long before trends rediscovered them.",root:'TRADITION',ok:['traditional'],strip:'adjective · think -AL',detail:'traditional — TRADITION + -AL'},
+    {icon:'🏷️',story:"An investigation found a well-known discount fragrance marketed as containing genuine oud — independent tests showed it contained none.",
+     line:"The fragrance had been _____ — independent testing found no oud content despite the prominent claim on the bottle.",root:'LABEL',ok:['mislabelled','mislabeled'],strip:'adjective · prefix MIS- AND suffix -LED',detail:'mislabelled — MIS- + LABEL + -LED'},
+    {icon:'🗺️',story:"The brief was simple — a fragrance that smelled like a warm afternoon on a Moroccan rooftop. The perfumer spent six months on it.",
+     line:"The resulting formula was extraordinarily _____ — green tea, warm stone, and a flicker of incense that felt like memory.",root:'IMAGINE',ok:['imaginative'],strip:'adjective · think -ATIVE',detail:'imaginative — IMAGINE → IMAGIN + -ATIVE'},
+    {icon:'💧',story:"The same formula at different strengths is a completely different experience — from Eau de Cologne through to Parfum.",
+     line:"The _____ of a fragrance determines how long it lasts and how far it projects — higher percentages mean stronger sillage.",root:'CONCENTRATE',ok:['concentration'],strip:'noun · think -TION',detail:'concentration — CONCENTRATE → CONCENTRAT + -ION'},
+    {icon:'🌱',story:"Prada Luna Rossa Carbon became one of 2026's most discussed men's fragrances — its creators insisted on sourcing real carbon accord materials.",
+     line:"The formula used only _____ ingredients — no synthetic shortcuts — which is why the opening minutes smell so genuinely fresh.",root:'NATURE',ok:['natural'],strip:'adjective · think -AL',detail:'natural — NATUR(E) + -AL'},
+    {icon:'💨',story:"Many beginners assume that a strong first spray means a long-lasting fragrance. An hour later, it's gone — the projection had deceived them.",
+     line:"A common _____ among new buyers is that high initial projection means long-lasting performance — in fact the two are unrelated.",root:'UNDERSTAND',ok:['misunderstanding'],strip:'noun · prefix MIS- AND suffix -ING',detail:'misunderstanding — MIS- + UNDERSTAND + -ING'},
+    {icon:'⏳',story:"Niche perfumers don't rush formula development. Some spend three to five years refining a single fragrance before it reaches shelves.",
+     line:"The _____ of a serious niche fragrance — testing, refining, sourcing — can take years before a single bottle reaches a customer.",root:'PREPARE',ok:['preparation'],strip:'noun · think -ATION',detail:'preparation — PREPARE → PREPAR + -ATION'},
+    {icon:'☀️',story:"Essential oils — bergamot especially — can cause serious skin reactions in sunlight. This is standard knowledge in any professional fragrance house.",
+     line:"Applying bergamot-based fragrances before sun exposure requires a simple _____ — wear it on clothes, not directly on exposed skin.",root:'CAUTION',ok:['precaution'],strip:'noun · prefix PRE- (before, to prevent problems)',detail:'precaution — PRE- + CAUTION'},
+    {icon:'🌍',story:"The Ralph Lauren x Usher collaboration for Ralph's Club New York was designed to cross cultural and geographical lines — a fragrance without a single postcode.",
+     line:"Ralph's Club New York was positioned as a truly _____ fragrance — designed to resonate across cultures, not just one market.",root:'NATION',ok:['international'],strip:'adjective · prefix INTER- AND suffix -AL',detail:'international — INTER- + NATION + -AL'}
+  ]},
+  {num:8,name:'Elite',focus:'OVER- · -ISM · -ITY · -FUL',sets:[
+    {icon:'💥',story:"Spraying five times in a small room is a classic beginner mistake — the scent fills every cubic metre and the people around you suffer.",
+     line:"The opening blast of oud and patchouli was completely _____ in a small room — even the perfumer herself took two steps back.",root:'POWER',ok:['overpowering'],strip:'adjective · prefix OVER- AND suffix -ING',detail:'overpowering — OVER- + POWER + -ING'},
+    {icon:'📰',story:"A major fragrance reviewer gave the much-hyped release one star — the marketing was far better than what was inside the bottle.",
+     line:"The launch generated enormous buzz, but the _____ from serious reviewers was just as enormous — and far less kind.",root:'CRITIC',ok:['criticism'],strip:'noun · think -ICISM',detail:'criticism — CRITIC + -ISM → criticism'},
+    {icon:'🧴',story:"Not every perfumer can work with genuine oud. The raw material requires years of experience — too much overwhelms, too little disappears.",
+     line:"Working with raw oud was the house's _____ — a skill that fewer than a dozen perfumers in the world had genuinely mastered.",root:'SPECIAL',ok:['speciality','specialty'],strip:'noun · think -ITY',detail:'speciality — SPECIAL + -ITY'},
+    {icon:'🏳️',story:"In 2026, several major fragrance houses dropped gendered labelling entirely — releasing fragrances marketed as suitable for any wearer.",
+     line:"The shift toward scent _____ — removing gendered packaging and marketing entirely — was one of the most discussed trends of the year.",root:'EQUAL',ok:['equality'],strip:'noun · think -ITY',detail:'equality — EQUAL + -ITY'},
+    {icon:'💸',story:"A 60ml bottle at £320 generated fierce debate online — buyers argued the juice inside cost a fraction of that to produce.",
+     line:"Many reviewers argued the release was severely _____ — a mark-up driven by brand reputation rather than any quality in the formula.",root:'PRICE',ok:['overpriced'],strip:'adjective · prefix OVER- AND suffix -ED',detail:'overpriced — OVER- + PRICE + -ED'},
+    {icon:'🍯',story:"Honey repositioned itself in 2026 as a serious fragrance note — warm, complex, unexpectedly masculine when paired with dark wood.",
+     line:"The combination of honey and cedarwood was _____ — a pairing that shouldn't work on paper but created something genuinely warm and lasting.",root:'WONDER',ok:['wonderful'],strip:'adjective · think -FUL',detail:'wonderful — WONDER + -FUL'},
+    {icon:'🌊',story:"Hundreds of fragrances launch every year — most in familiar shapes, predictable note pyramids. Only a few make people stop.",
+     line:"In a market flooded with safe releases, the house stood out for its _____ — every bottle, every formula, something genuinely unlike anything else.",root:'ORIGINAL',ok:['originality'],strip:'noun · think -ITY',detail:'originality — ORIGINAL + -ITY'},
+    {icon:'😵',story:"Fragrance fatigue is real — when you can no longer smell what you're wearing, you spray more. Then everyone around you suffers.",
+     line:"The _____ of a fragrance causes olfactory fatigue quickly — after a point, only the people around you can tell how much is too much.",root:'USE',ok:['overuse'],strip:'noun · prefix OVER- (too much use)',detail:'overuse — OVER- + USE'},
+    {icon:'🖤',story:"The bottle alone was a statement — jet black glass with a single gold stripe. Picking it up felt like an event before you'd even opened it.",
+     line:"The packaging was deliberately _____ — an all-black bottle that signalled something dark and serious before anyone had smelled the fragrance.",root:'DRAMA',ok:['dramatic'],strip:'adjective · think -IC',detail:'dramatic — DRAMA → DRAMAT + -IC'},
+    {icon:'🎭',story:"The art of layering two fragrances — scent stacking — so they enhance rather than clash requires genuine understanding of note families.",
+     line:"Effective scent stacking is a _____ practice — it takes real understanding of which note families complement rather than compete.",root:'SKILL',ok:['skilful','skillful'],strip:'adjective · think -FUL',detail:'skilful — SKILL → SKIL + -FUL (one L drops)'}
+  ]},
+  {num:9,name:'Pro Plus',focus:'IN-/IL-/IM- · -EN verbs',sets:[
+    {icon:'📝',story:"Fragrance descriptions online are famously unreliable — words like 'fresh' and 'clean' mean completely different things to different reviewers.",
+     line:"Most online fragrance descriptions are slightly _____ — words like 'fresh' or 'woody' mean something different to every reviewer.",root:'ACCURATE',ok:['inaccurate'],strip:'adjective · negative prefix IN-',detail:'inaccurate — IN- + ACCURATE'},
+    {icon:'⏰',story:"Spraying a fragrance and immediately deciding you dislike it is one of the most common mistakes — the top notes last only thirty seconds.",
+     line:"New buyers are often _____ — they judge a scent in the first thirty seconds before the interesting base notes have even appeared.",root:'PATIENT',ok:['impatient'],strip:'adjective · negative prefix IM- (used before P)',detail:'impatient — IM- + PATIENT'},
+    {icon:'❄️',story:"A formula tested in summer may perform completely differently in winter — temperature changes how notes open and how long they last.",
+     line:"A fragrance tested only in warm conditions gives an _____ picture — performance in cold weather is often dramatically different.",root:'COMPLETE',ok:['incomplete'],strip:'adjective · negative prefix IN-',detail:'incomplete — IN- + COMPLETE'},
+    {icon:'👻',story:"Great sillage leaves a trail — people know you've been somewhere before they see you. The best kind stays just below the threshold of obvious.",
+     line:"The ideal sillage level for professional settings is almost _____ — present enough to register, subtle enough not to distract.",root:'VISIBLE',ok:['invisible'],strip:'adjective · negative prefix IN-',detail:'invisible — IN- + VISIBLE'},
+    {icon:'📖',story:"A reviewer argued that mixing oud with bergamot was a strange decision. The perfumer replied that the combination had a 200-year history in Arabian perfumery.",
+     line:"The critic's claim that oud and bergamot was an _____ pairing ignored two centuries of Arabic perfumery tradition.",root:'LOGIC',ok:['illogical'],strip:'adjective · negative prefix IL- AND suffix -AL',detail:'illogical — IL- + LOGIC + -AL'},
+    {icon:'🍯',story:"Honey had been a sweet, feminine note for decades. In 2026, some of the most talked-about men's releases used it as a central accord.",
+     line:"Honey as the cornerstone of a masculine fragrance seemed _____ ten years ago — in 2026, it became one of the year's defining trends.",root:'PROBABLE',ok:['improbable'],strip:'adjective · negative prefix IM- (used before P)',detail:'improbable — IM- + PROBABLE'},
+    {icon:'🌰',story:"Ageing a fragrance — letting the bottle rest for months before opening it — allows all the ingredients to integrate and develop depth.",
+     line:"Resting a freshly purchased bottle for several months can genuinely _____ the scent — the notes integrate and soften beautifully.",root:'RICH',ok:['enrich'],strip:'verb · prefix EN- (make rich)',detail:'enrich — EN- + RICH'},
+    {icon:'🌑',story:"As evenings cool in autumn, heavy woods and resins come into their own — ambers, musks, and patchouli begin to feel natural rather than excessive.",
+     line:"The base notes begin to _____ as a fragrance evolves — the citrus fades and the deeper woods and resins gradually take over.",root:'DARK',ok:['darken'],strip:'verb · add -EN (make dark)',detail:'darken — DARK + -EN'},
+    {icon:'⏳',story:"A fragrance that smells thin on first spray often rewards patience — after twenty minutes on skin the base notes arrive and everything changes.",
+     line:"The dry-down on skin causes the wood and musk base notes to _____ dramatically — what starts thin often becomes genuinely complex.",root:'DEEP',ok:['deepen'],strip:'verb · add -EN (make deep)',detail:'deepen — DEEP + -EN'},
+    {icon:'☀️',story:"Summer fragrances reverse the usual formula — instead of building toward weight and warmth, the best ones fade cleanly into almost nothing.",
+     line:"A good summer fragrance should _____ as the day progresses — not cling, not announce itself — just leave a quiet trace and fade.",root:'LIGHT',ok:['lighten'],strip:'verb · add -EN (make light)',detail:'lighten — LIGHT + -EN'}
+  ]},
+  {num:10,name:'Champion',focus:'Mixed B1 patterns',sets:[
+    {icon:'🏆',story:"Prada Luna Rossa Carbon became one of the decade's most consistently reviewed men's fragrances — still in the top ten five years after launch.",
+     line:"The most _____ men's fragrances of the 2020s shared one quality: they worked across multiple seasons and settings without feeling out of place.",root:'SUCCESS',ok:['successful'],strip:'adjective · think -FUL',detail:'successful — SUCCESS → SUCCESSF + -UL'},
+    {icon:'🌸',story:"Choosing a signature scent — the one fragrance that represents you every single day — is one of the most personal choices in grooming.",
+     line:"The _____ to make one fragrance your daily signature is worth taking seriously — what you wear leaves a lasting impression on everyone around you.",root:'DECIDE',ok:['decision'],strip:'noun · think -ION (spelling changes)',detail:'decision — DECIDE → DECIS + -ION'},
+    {icon:'📚',story:"Fragrance families — fougère, chypre, oriental, woody — are the foundation of everything. Without them, you're shopping blind.",
+     line:"A solid _____ of fragrance families is the single most useful tool when navigating a fragrance counter without being misled.",root:'KNOW',ok:['knowledge'],strip:'noun · irregular form — spelling changes',detail:'knowledge — KNOW → KNOWL + -EDGE'},
+    {icon:'💡',story:"Aramis, with its 2025 relaunch of Intuition, was being watched by the entire industry as a heritage house pivoting for a new generation.",
+     line:"Aramis took _____ in the heritage house relaunch conversation — their modernisation of Intuition was studied by every major competitor.",root:'LEAD',ok:['leadership'],strip:'noun · think -SHIP',detail:'leadership — LEAD + -ER + -SHIP → leadership'},
+    {icon:'🎲',story:"Honey was not supposed to become the masculine note of 2026. Neither was lavender in 2016. Fragrance trends defy every forecast.",
+     line:"Fragrance trends are notoriously _____ — the notes that dominate a given year are rarely the ones analysts expected twelve months earlier.",root:'PREDICT',ok:['unpredictable'],strip:'adjective · prefix UN- AND suffix -ABLE',detail:'unpredictable — UN- + PREDICT + -ABLE'},
+    {icon:'🏪',story:"Niche fragrance houses used to operate in a bubble — small batches, loyal customers. In 2026, they fight designer houses on the same shelves.",
+     line:"The niche sector has become intensely _____ — smaller houses now compete for the same shelf space and customer attention as global brands.",root:'COMPETE',ok:['competitive'],strip:'adjective · think -ITIVE (spelling changes)',detail:'competitive — COMPETE → COMPETI + -TIVE'},
+    {icon:'🗽',story:"The perfumer behind Ralph's Club New York credited Usher's Manhattan residency — the mood of a city at night — as the starting point for everything.",
+     line:"The _____ behind Ralph's Club New York was the energy of Manhattan at night — glamour, motion, warmth, and something indefinably urban.",root:'INSPIRE',ok:['inspiration'],strip:'noun · think -ATION',detail:'inspiration — INSPIRE → INSPIR + -ATION'},
+    {icon:'⏰',story:"The slow perfumery movement means some houses take five years to release a single fragrance — every ingredient sourced, every formula refined until nothing remains to improve.",
+     line:"The _____ of slow perfumery houses to refuse shortcuts — testing for years, sourcing ethically — produces some of the finest results in the industry.",root:'DETERMINE',ok:['determination'],strip:'noun · think -ATION',detail:'determination — DETERMINE → DETERMIN + -ATION'},
+    {icon:'🎭',story:"Building a fragrance wardrobe means having something for every context — morning commute, evening dinner, sport, formal event, travel.",
+     line:"Serious collectors prize _____ above all — a different scent for morning, evening, season, and mood is the mark of genuine engagement.",root:'VARY',ok:['variety'],strip:'noun · think -IETY (tricky spelling)',detail:'variety — VARY → VARI + -ETY'},
+    {icon:'🎨',story:"The best perfumers are not chemists following formulas — they are artists building invisible architecture that lives on skin and in memory.",
+     line:"Master perfumers are among the most _____ professionals in the luxury industry — they construct emotional experiences using invisible materials.",root:'CREATE',ok:['creative'],strip:'adjective · think -IVE',detail:'creative — CREATE → CREAT + -IVE'}
+  ]}
+  ]
+}
+
+}; // end DATA
+
+// ─── PROGRESS (sessionStorage — resets on tab close / page refresh) ──────────
+function getProg(){return JSON.parse(sessionStorage.getItem('wl2')||'{}')}
+function saveProg(t,li,score){
+  const p=getProg();
+  if(!p[t])p[t]={};
+  if(p[t][li]===undefined||score>p[t][li])p[t][li]=score;
+  sessionStorage.setItem('wl2',JSON.stringify(p));
+}
+function bestScore(t,li){const p=getProg();return p[t]??({})[li]??p[t]?.[li]??null}
+// fix:
+function best(t,li){const p=getProg();return(p[t]??{})[li]??null}
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let S={topicKey:null,levelIdx:0,idx:0,score:0,streak:0,answered:false,hintUsed:false,log:[]};
+
+// ─── SCREEN ───────────────────────────────────────────────────────────────────
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
+  const el=document.getElementById(id);
+  el.classList.remove('hidden');
+  el.style.animation='none';void el.offsetHeight;el.style.animation='';
+}
+
+function fmtTime(s){return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
+
+function updateTracker(){
+  let grandTotal=0;
+  ['football','kendama','perfume'].forEach(key=>{
+    const maxLv=DATA[key].levels.length;
+    let done=0;
+    DATA[key].levels.forEach((_,li)=>{if((best(key,li)??0)>=8)done++;});
+    grandTotal+=done;
+    const secs=done*30;
+    const pct=Math.round(done/maxLv*100);
+    document.getElementById('tk-lvls-'+key).textContent=done+' / '+maxLv;
+    document.getElementById('tk-time-'+key).textContent=fmtTime(secs);
+    document.getElementById('tk-bar-'+key).style.width=pct+'%';
+  });
+  document.getElementById('tk-total').textContent=fmtTime(grandTotal*30);
+}
+
+// ─── CASHOUT / VERIFY ─────────────────────────────────────────────────────────
+const _K='wl3-v1-b8f2a91c4d5e6f7a';
+
+function _b64u(buf){
+  return btoa(String.fromCharCode(...new Uint8Array(buf)))
+    .replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
+}
+function _b64uDec(s){
+  const pad='=='.slice(0,(4-s.length%4)%4);
+  return Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'/')+pad),c=>c.charCodeAt(0));
+}
+async function _hmacSign(msg){
+  const k=await crypto.subtle.importKey('raw',new TextEncoder().encode(_K),
+    {name:'HMAC',hash:'SHA-256'},false,['sign']);
+  const buf=await crypto.subtle.sign('HMAC',k,new TextEncoder().encode(msg));
+  return new Uint8Array(buf).slice(0,12); // 96-bit truncated MAC
+}
+
+async function generateCashout(){
+  const b={};let total=0;
+  ['football','kendama','perfume'].forEach(key=>{
+    let done=0;
+    DATA[key].levels.forEach((_,li)=>{if((best(key,li)??0)>=8)done++;});
+    b[key[0]]=done;total+=done;
+  });
+  const payload={t:total*30,b,ts:Math.floor(Date.now()/60000)};
+  const pStr=_b64u(new TextEncoder().encode(JSON.stringify(payload)));
+  const mac=await _hmacSign(pStr);
+  const token=pStr+'.'+_b64u(mac.buffer);
+  document.getElementById('cashout-code').textContent=token;
+  document.getElementById('cashout-result').style.display='';
+  document.getElementById('btn-copy').textContent='📋 Copy';
+}
+
+async function verifyCode(){
+  const raw=document.getElementById('checker-inp').value.trim().replace(/\s/g,'');
+  const out=document.getElementById('verify-result');
+  const fail=(msg)=>{out.className='vr bad';out.innerHTML='<div class="vr-msg">'+msg+'</div>';out.style.display='';};
+
+  const dot=raw.lastIndexOf('.');
+  if(dot<1||dot===raw.length-1){fail('❌ Invalid code format.');return;}
+  const pStr=raw.slice(0,dot),sigStr=raw.slice(dot+1);
+
+  let payload;
+  try{payload=JSON.parse(new TextDecoder().decode(_b64uDec(pStr)));}
+  catch{fail('❌ Code could not be read.');return;}
+
+  const expected=await _hmacSign(pStr);
+  const given=_b64uDec(sigStr);
+  let match=given.length===expected.length;
+  for(let i=0;i<expected.length;i++) if(given[i]!==expected[i]) match=false;
+  if(!match){fail('❌ Code is invalid or has been tampered with.');return;}
+
+  const mins=Math.floor(payload.t/60),secs=payload.t%60;
+  const timeStr=mins+':'+String(secs).padStart(2,'0');
+  const when=new Date((payload.ts??0)*60000);
+  const whenStr=when.toLocaleDateString()+' '+when.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  const f=payload.b?.f??0,k=payload.b?.k??0,p=payload.b?.p??0;
+  out.className='vr good';
+  out.innerHTML=`<div class="vr-time">${timeStr}</div>
+<div class="vr-detail">⚽ ${f} level${f!==1?'s':''} &nbsp;·&nbsp; 🪀 ${k} level${k!==1?'s':''} &nbsp;·&nbsp; 🌸 ${p} level${p!==1?'s':''}</div>
+<div class="vr-ts">Generated ${whenStr}</div>`;
+  out.style.display='';
+}
+
+function copyCode(){
+  navigator.clipboard.writeText(document.getElementById('cashout-code').textContent)
+    .then(()=>{
+      const b=document.getElementById('btn-copy');
+      b.textContent='✓ Copied';setTimeout(()=>b.textContent='📋 Copy',2000);
+    }).catch(()=>{document.getElementById('btn-copy').textContent='⚠ Copy manually';});
+}
+
+function goHome(){show('s-welcome');updateTracker()}
+function goLevels(){buildLevels(S.topicKey);show('s-levels')}
+
+function pickTopic(key){
+  S.topicKey=key;
+  buildLevels(key);
+  show('s-levels');
+}
+
+// ─── LEVEL SELECT ─────────────────────────────────────────────────────────────
+function getNextLevel(key){
+  // Returns index of the first unlocked level that hasn't been passed (score < 5 or unplayed)
+  const t=DATA[key];
+  for(let li=0;li<t.levels.length;li++){
+    const unlocked=li===0||(best(key,li-1)??-1)>=5;
+    if(!unlocked) return -1; // locked wall — nothing to continue into
+    const sc=best(key,li);
+    if(sc===null||sc<5) return li;
+  }
+  return -1; // all levels cleared
+}
+
+function buildLevels(key){
+  const t=DATA[key];
+  document.getElementById('lvl-emoji').textContent=t.emoji;
+  document.getElementById('lvl-title').textContent=t.label;
+  document.documentElement.style.setProperty('--tc',t.color);
+  const nextLi=getNextLevel(key);
+  const grid=document.getElementById('lvl-grid');
+  grid.innerHTML='';
+  t.levels.forEach((lv,li)=>{
+    const sc=best(key,li);
+    const unlocked=li===0||(best(key,li-1)??-1)>=5;
+    const stars=sc===null?0:sc>=9?3:sc>=7?2:sc>=5?1:0;
+    const starStr=stars===3?'★★★':stars===2?'★★☆':stars===1?'★☆☆':'☆☆☆';
+    const doneClass=stars===3?'done-3':stars===2?'done-2':stars===1?'done-1':'';
+    const isNext=unlocked&&li===nextLi;
+    const card=document.createElement('div');
+    card.className='lc '+(unlocked?(doneClass+(isNext?' next-up':'')):'locked');
+    card.innerHTML=`
+      ${!unlocked?'<span class="lock-icon">🔒</span>':''}
+      ${isNext?'<span class="next-badge">▶ Continue</span>':''}
+      <div class="lnum">Level ${lv.num}</div>
+      <div class="lname">${lv.name}</div>
+      <div class="lfocus">${lv.focus}</div>
+      <div class="stars">${sc!==null?starStr:unlocked?'Not played yet':''}</div>
+      ${sc!==null?`<div style="font-size:.72rem;color:var(--dim);margin-top:4px">Best: ${sc}/10</div>`:''}
+    `;
+    if(unlocked) card.onclick=()=>startLevel(key,li);
+    grid.appendChild(card);
+  });
+}
+
+function startLevel(key,li){
+  S={topicKey:key,levelIdx:li,idx:0,score:0,streak:0,answered:false,hintUsed:false,log:[]};
+  const t=DATA[key];
+  document.getElementById('s-exercise').className='screen '+t.cls;
+  document.documentElement.style.setProperty('--tc',t.color);
+  buildDots(t.levels[li].sets.length);
+  show('s-exercise');
+  render();
+}
+
+// ─── STRIP DISPLAY (R1: no suffix/prefix clues shown to student) ──────────────
+function displayStrip(s){
+  // Extract only the part of speech (everything before the ·)
+  // Then append a contextual note for special cases, without naming the actual affix
+  const pos=s.split('·')[0].replace(/\(.*?\)/g,'').trim();
+  if(/extremely valuable/i.test(s))
+    return pos+' — careful: the prefix here does not mean "not"';
+  if(/UNDER-/i.test(s))
+    return pos+' — two changes needed (think: too little of something)';
+  if(/AND.*suffix|suffix.*AND|add.*prefix.*suffix/i.test(s))
+    return pos+' — negative form, two changes needed';
+  if(/add a negative prefix/i.test(s))
+    return pos+' — negative form';
+  if(/DIS-|UN-|IM-|IR-/i.test(s))
+    return pos+' — negative form';
+  if(/person/i.test(s)||/\bIST\b/.test(s))
+    return pos+' — a person';
+  if(/again/i.test(s))
+    return pos+' — same action, done again';
+  if(/irregular/i.test(s))
+    return pos+' — irregular form, the spelling changes';
+  return pos;
+}
+
+// ─── DOTS ─────────────────────────────────────────────────────────────────────
+function buildDots(n){
+  const row=document.getElementById('dots');row.innerHTML='';
+  for(let i=0;i<n;i++){
+    const d=document.createElement('div');
+    d.className='dot'+(i===0?' cur':'');d.id='d'+i;row.appendChild(d);
+  }
+}
+function setDot(i,cls){const d=document.getElementById('d'+i);if(d)d.className='dot '+cls}
+
+// ─── RENDER ───────────────────────────────────────────────────────────────────
+function render(){
+  const t=DATA[S.topicKey];const lv=t.levels[S.levelIdx];const ex=lv.sets[S.idx];
+  const total=lv.sets.length;
+  S.answered=false;S.hintUsed=false;
+  document.getElementById('hud-sc').textContent=S.score;
+  refreshStreak();
+  document.getElementById('prog').style.width=(S.idx/total*100)+'%';
+  document.getElementById('tb-em').textContent=t.emoji;
+  document.getElementById('tb-nm').textContent=t.label+' · Lv '+lv.num;
+  document.getElementById('tb-n').textContent=(S.idx+1)+' / '+total;
+  document.getElementById('an-i').textContent=ex.icon;
+  document.getElementById('an-t').textContent=ex.story;
+  document.getElementById('root-d').textContent=ex.root;
+  const se=document.getElementById('sent-el');
+  se.innerHTML=ex.line.replace('_____','<span class="blank" id="bl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>');
+  document.getElementById('hst').innerHTML='What form? <strong>'+displayStrip(ex.strip)+'</strong>';
+  const hr=document.getElementById('hrev');hr.className='hrev';hr.textContent='';
+  const wi=document.getElementById('wi');
+  wi.value='';wi.className='wi';wi.disabled=false;
+  setTimeout(()=>wi.focus(),60);
+  document.getElementById('fb').className='fb';document.getElementById('fb').innerHTML='';
+  document.getElementById('b-nxt').className='btn ba nxt';
+  document.getElementById('b-chk').style.display='';
+  document.getElementById('b-hint').style.display='';
+  document.getElementById('b-hint').disabled=false;
+  document.getElementById('b-hint').style.opacity='';
+  const c=document.getElementById('exc');
+  c.style.animation='none';void c.offsetHeight;c.style.animation='slideR .32s ease both';
+}
+
+// ─── HINT ─────────────────────────────────────────────────────────────────────
+function useHint(){
+  if(S.hintUsed||S.answered)return;
+  S.hintUsed=true;
+  const ex=DATA[S.topicKey].levels[S.levelIdx].sets[S.idx];
+  const hr=document.getElementById('hrev');hr.textContent=ex.detail;hr.className='hrev on';
+  const bh=document.getElementById('b-hint');bh.disabled=true;bh.style.opacity='.35';
+}
+
+// ─── CHECK ────────────────────────────────────────────────────────────────────
+function check(){
+  if(S.answered)return;
+  const wi=document.getElementById('wi');
+  const raw=wi.value.trim().toLowerCase().replace(/[^a-z]/g,'');
+  if(!raw){wi.focus();return;}
+  const ex=DATA[S.topicKey].levels[S.levelIdx].sets[S.idx];
+  const isOk=ex.ok.map(a=>a.toLowerCase()).includes(raw);
+  S.answered=true;wi.disabled=true;
+  const bl=document.getElementById('bl');if(bl){bl.textContent=raw;bl.classList.add('filled')}
+  const fb=document.getElementById('fb');
+  if(isOk){
+    wi.className='wi correct';S.score++;S.streak++;
+    document.getElementById('hud-sc').textContent=S.score;refreshStreak();
+    fb.className='fb correct';
+    fb.innerHTML='✓ Correct — <strong>'+ex.ok[0]+'</strong>. '+pickOk();
+    setDot(S.idx,'ok');spawnXP(wi,'+1');
+  }else{
+    wi.className='wi wrong';S.streak=0;refreshStreak();
+    fb.className='fb wrong';
+    fb.innerHTML='✗ Not quite. The answer is <span class="rv">'+ex.ok[0]+'</span>. '+pickWrong(ex.root);
+    setDot(S.idx,'miss');
+  }
+  S.log.push({root:ex.root,given:raw,right:isOk,ans:ex.ok[0]});
+  document.getElementById('b-nxt').className='btn ba nxt on';
+  document.getElementById('b-chk').style.display='none';
+  document.getElementById('b-hint').style.display='none';
+}
+
+// ─── ADVANCE ──────────────────────────────────────────────────────────────────
+function advance(){
+  S.idx++;
+  const total=DATA[S.topicKey].levels[S.levelIdx].sets.length;
+  if(S.idx>=total){
+    saveProg(S.topicKey,S.levelIdx,S.score);
+    showResults();
+  }else{
+    setDot(S.idx,'cur');render();
+  }
+}
+
+function restart(){startLevel(S.topicKey,S.levelIdx)}
+
+// ─── STREAK ───────────────────────────────────────────────────────────────────
+function refreshStreak(){
+  const ch=document.getElementById('strk');
+  document.getElementById('strk-n').textContent=S.streak;
+  S.streak>=2?ch.classList.add('on'):ch.classList.remove('on');
+}
+
+// ─── XP BURST ─────────────────────────────────────────────────────────────────
+function spawnXP(anchor,txt){
+  const r=anchor.getBoundingClientRect();
+  const el=document.createElement('div');el.className='xpb';el.textContent=txt;
+  el.style.left=(r.left+r.width/2-16)+'px';el.style.top=(r.top+window.scrollY-8)+'px';
+  document.body.appendChild(el);setTimeout(()=>el.remove(),1300);
+}
+
+// ─── FEEDBACK LINES ───────────────────────────────────────────────────────────
+const OKS=['Clean.','Nailed it.','Exactly right.','Solid — remember that pattern.','Perfect form.',
+           "That's the one.",'Sharp. Keep that suffix in mind.'];
+const BAD=[r=>`The root is ${r}. What part of speech does the sentence need?`,
+           r=>`${r} → think about the suffix or prefix that changes it to fit.`,
+           r=>`Look at ${r}. Noun, adjective, adverb, or verb?`];
+function pickOk(){return OKS[Math.floor(Math.random()*OKS.length)]}
+function pickWrong(r){return BAD[Math.floor(Math.random()*BAD.length)](r)}
+
+// ─── RESULTS ──────────────────────────────────────────────────────────────────
+function showResults(){
+  const sc=S.score,tot=10,pct=sc/tot;
+  document.getElementById('r-sc').textContent=sc;
+  document.getElementById('prog').style.width='100%';
+  let em,ti,msg,gCls,gTx;
+  if(pct>=.9){em='🏆';ti='Outstanding.';gTx='Excellent';gCls='ga';msg="Excellent work. The patterns are sticking — build on this."}
+  else if(pct>=.7){em='⭐';ti='Really solid.';gTx='Good';gCls='gb';msg="Good result. A few suffixes to sharpen — the foundation is strong."}
+  else if(pct>=.5){em='📈';ti='Getting there.';gTx='Developing';gCls='gc';msg="Some good answers. Look at the patterns you missed — they repeat across every paper."}
+  else{em='🔁';ti='Keep at it.';gTx='Keep Practising';gCls='gd';msg="Word formation takes time. Study the suffix patterns in the breakdown below, then try again."}
+  document.getElementById('r-em').textContent=em;
+  document.getElementById('r-ti').textContent=ti;
+  document.getElementById('r-msg').textContent=msg;
+  const gp=document.getElementById('r-gp');gp.textContent=gTx;gp.className='gp '+gCls;
+  const t=DATA[S.topicKey];
+  document.getElementById('s-results').className='screen '+t.cls;
+  document.getElementById('bdown').innerHTML=S.log.map(e=>`
+    <div class="bdr">
+      <span class="br">${e.root}</span>
+      <span class="ba2">${e.given}</span>
+      ${e.right
+        ?'<span class="bm" style="color:var(--green)">✓</span>'
+        :`<span class="bm" style="color:var(--red)">✗</span><span class="bcv">${e.ans}</span>`}
+    </div>`).join('');
+  show('s-results');
+}
+
+// ─── KEYBOARD ─────────────────────────────────────────────────────────────────
+document.getElementById('wi').addEventListener('keydown',e=>{
+  if(e.key!=='Enter')return;
+  check();
+});
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Enter')return;
+  if(e.target.id==='wi')return;
+  if(document.getElementById('s-exercise').classList.contains('hidden'))return;
+  if(S.answered)advance();
+});
+
+// Initialise tracker on first load
+updateTracker();
+</script>
+</body>
+</html>
